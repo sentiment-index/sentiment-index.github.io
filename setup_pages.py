@@ -115,8 +115,10 @@ def generate_index():
     build_row("Top Terms", top_terms, "today_score", is_change=False)
     build_row("Bottom Terms", bottom_terms, "today_score", is_change=False)
 
-    html += """
+    html += f"""
 </div>
+
+<div class="timenote">Last updated {datetime.now().strftime("%I:%M%p on %B %d, %Y")}</div>
 </body>
 </html>
 """
@@ -294,6 +296,8 @@ def generate_term_page(term: str):
         }}
     }});
 </script>
+
+<div class="timenote">Last updated {datetime.now().strftime("%I:%M%p on %B %d, %Y")}</div>
 
 </body>
 </html>

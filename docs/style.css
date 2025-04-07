@@ -275,4 +275,10 @@ a {
   border: none;
 }
 
+.timenote {
+  text-align: center;
+  font-style: italic;
+  font-size: 10px;
+  height: 100px;
+}
 
