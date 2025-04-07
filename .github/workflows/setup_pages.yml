@@ -35,7 +35,7 @@ jobs:
       run: |
         pip install -r requirements.txt
 
-    - name: Run setup_pages.py
+    - name: Run refresh_site.py
       env:
         REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
         REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}

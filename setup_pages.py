@@ -9,6 +9,78 @@ HTML_BASE_DIR = "docs"
 def term_to_url(term: str) -> str:
     return  term.replace(" ", "-").lower()+".html"
 
+def generate_about():
+
+    terms_list = get_term_list()
+    terms_json = str(terms_list).replace("'", '"')
+
+    html = f"""<link rel="stylesheet" href="style.css">
+<html>
+<head>
+    <script>const TERMS = {terms_json};</script>
+    <link rel="icon" type="image/x-icon" href="site-assets/favicon.svg">
+</head>
+
+<header class="site-header">
+  <div class="header-content">
+    <div class="logo">
+      <img src="site-assets/logo.svg" alt="Logo">
+    </div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <button class="search-button"><img src="site-assets/search.svg" alt="Search" class="search-icon"></button>
+    </nav>
+  </div>
+</header>
+
+<body>
+<div id="search-overlay" class="search-overlay" style="display: none;">
+    <div class="search-box">
+        <span><button class="close-search">X</button><input type="text" id="search-input" placeholder="Search for a term..." /></span>
+        <div id="search-results"></div>
+    </div>
+</div>
+
+<div class="topbox">
+  <h1>How it works</h1>
+</div>
+
+<div class="wrapper">
+
+<section class="about-section">
+  <h2>The Idea</h2>
+  <p>Every day, millions of conversations happen on the internet. We built this site to track how people feel about key topics over time. Why do we only search Reddit? Its API is the cheapest.</p>
+</section>
+
+<section class="about-section">
+  <h2>The Methodology</h2>
+  <p>We start with a curated list of 100 terms that we want to track. Every day at midnight MST, we search Reddit for new posts mentioning these terms. Each post is semantically analyzed and assigned a sentiment score from <strong>1 (very negative)</strong> to <strong>5 (very positive)</strong> based on how people are talking about it.</p>
+  <p>For each term, we average the scores across all the posts from that day. We scale that to create our scores, which go from -1 for highly negative sentiment to 1 for positive sentiment.</p>
+</section>
+
+<section class="about-section">
+  <h2>Notes</h2>
+  <ul>
+    <li>Sentiment scores are averaged across posts mentioning a term, not weighted by upvotes or engagement.</li>
+    <li>We use a plaintext search, so we don't look at related terms, only the term itself.</li>
+    <li>Posts are analyzed using semantic language models, but sentiment analysis is inherently subjective and imperfect.</li>
+  </ul>
+</section>
+
+</div>
+
+<div class="timenote">Last updated {datetime.now().strftime("%I:%M%p on %B %d, %Y")}</div>
+
+<script src="site-assets/search.js"></script>
+</body>
+</html>
+"""
+
+    with open(os.path.join(HTML_BASE_DIR, "about.html"), "w", encoding="utf-8") as f:
+        f.write(html)
+
+
 def generate_index():
     term_scores = []
 
@@ -52,7 +124,7 @@ def generate_index():
     </div>
     <nav class="nav-links">
       <a href="index.html">Home</a>
-      <a href="#">About</a>
+      <a href="about.html">About</a>
       <button class="search-button"><img src="site-assets/search.svg" alt="Search" class="search-icon"></button>
     </nav>
   </div>
@@ -206,7 +278,7 @@ def generate_term_page(term: str):
     </div>
     <nav class="nav-links">
       <a href="index.html">Home</a>
-      <a href="#">About</a>
+      <a href="about.html">About</a>
       <button class="search-button"><img src="site-assets/search.svg" alt="Search" class="search-icon"></button>
     </nav>
   </div>
@@ -310,5 +382,6 @@ def generate_term_page(term: str):
 
 if __name__ == "__main__":
     generate_index()
+    generate_about()
     for term in get_term_list():
         generate_term_page(term)

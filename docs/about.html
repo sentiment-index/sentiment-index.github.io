@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="style.css">
+<html>
+<head>
+    <script>const TERMS = ["USA", "Zendaya", "Apple", "Dogs", "Sabrina Carpenter", "Volodymyr Zelenskyy", "Superman", "Russell Brand", "Hakeem Jeffries", "Russia", "Economy", "Timothee Chalamet", "Batman", "Brazil", "Ford", "Eminem", "Cats", "Supreme Court", "Amazon", "Ukraine", "France", "Vladimir Putin", "Emmanuel Macron", "Narendra Modi", "Xi Jinping", "Javier Milei", "Wrestling", "Football", "Tariff", "Google", "Microsoft", "Baseball", "Pokemon", "South Korea", "Billie Eilish", "America", "Keir Starmer", "New York Times", "AOC", "Tesla", "Soccer", "Stock Market", "Dwayne Johnson", "Barbie", "Basketball", "Youtube", "Nintendo", "TV", "Walmart", "Podcasts", "Bitcoin", "Netflix", "Japan", "Star Wars", "Taylor Swift", "Harry Potter", "United Nations", "China", "LGBTQ", "UK", "NVIDIA", "Facebook", "Elon Musk", "Mike Johnson", "AI", "LeBron James", "Hockey", "Donald Trump", "Movies", "South Africa", "India", "Kendrick Lamar", "Marvel", "Rihanna", "Palestine", "Beyonce", "Democrats", "iPhone", "Nike", "Kim Kardashian", "Scott Bessent", "Anime", "Disney", "TikTok", "Egypt", "Chuck Schumer", "Marco Rubio", "Minecraft", "Congress", "Drake", "Israel", "Benjamin Netanyahu", "Eli Lilly", "OpenAI", "Sony", "Canada", "Hello Kitty", "Republicans", "NASA", "John Thune"];</script>
+    <link rel="icon" type="image/x-icon" href="site-assets/favicon.svg">
+</head>
+
+<header class="site-header">
+  <div class="header-content">
+    <div class="logo">
+      <img src="site-assets/logo.svg" alt="Logo">
+    </div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <button class="search-button"><img src="site-assets/search.svg" alt="Search" class="search-icon"></button>
+    </nav>
+  </div>
+</header>
+
+<body>
+<div id="search-overlay" class="search-overlay" style="display: none;">
+    <div class="search-box">
+        <span><button class="close-search">X</button><input type="text" id="search-input" placeholder="Search for a term..." /></span>
+        <div id="search-results"></div>
+    </div>
+</div>
+
+<div class="topbox">
+  <h1>How it works</h1>
+</div>
+
+<div class="wrapper">
+
+<section class="about-section">
+  <h2>The Idea</h2>
+  <p>Every day, millions of conversations happen on the internet. We built this site to track how people feel about key topics over time. Why Reddit? Its API is the cheapest.</p>
+</section>
+
+<section class="about-section">
+  <h2>The Methodology</h2>
+  <p>We start with a curated list of 100 terms that we want to track. Every day at midnight MST, we search Reddit for new posts mentioning these terms. Each post is semantically analyzed and assigned a sentiment score from <strong>1 (very negative)</strong> to <strong>5 (very positive)</strong> based on how people are talking about it.</p>
+  <p>For each term, we average the scores across all the posts from that day. We scale that to create our scores, which go from -1 for highly negative sentiment to 1 for positive sentiment.</p>
+</section>
+
+<section class="about-section">
+  <h2>Notes</h2>
+  <ul>
+    <li>Sentiment scores are averaged across posts mentioning a term, not weighted by upvotes or engagement.</li>
+    <li>We use a plaintext search, so we don't look at related terms, only the term itself.</li>
+    <li>Posts are analyzed using semantic language models, but sentiment analysis is inherently subjective and imperfect.</li>
+  </ul>
+</section>
+
+</div>
+
+<div class="timenote">Last updated 03:36PM on April 07, 2025</div>
+
+<script src="site-assets/search.js"></script>
+</body>
+</html>
