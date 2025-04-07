@@ -1,13 +1,13 @@
 import os
 import pickle
-import time
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, UTC, date
-from typing import List, Dict, Set, NamedTuple
+from datetime import datetime, timedelta, date
+from typing import List, Dict, Set
+from zoneinfo import ZoneInfo
+
 import praw
 from praw.models import Submission
 from transformers import pipeline
-import my_secrets
 
 SENTIMENT_BASE_DIR = "./sentiment-files"
 DAYS = 365
@@ -60,7 +60,7 @@ def serialize_avg_data(term: str, avg_data: Dict[str, float]):
         pickle.dump(avg_data, f)
 
 def compute_smoothed_avg(raw_data: Dict[str, List[float]]) -> Dict[str, float]:
-    today = datetime.now(UTC).date()
+    today = datetime.now(ZoneInfo("UTC")).date()
     date_range = [today - timedelta(days=i) for i in range(DAYS)]
     smoothed = {}
 
@@ -117,7 +117,7 @@ def add_term(term: str, populate: bool = True):
 
 def get_sentiment_for_day(term: str, day: date = None) -> float:
     if day is None:
-        day = str(datetime.now(UTC).date())
+        day = str(datetime.now(ZoneInfo("UTC")).date())
     term_dir = ensure_term_dir(term)
     avg_path = os.path.join(term_dir, "scores-avg.pkl")
     if not os.path.exists(avg_path):
