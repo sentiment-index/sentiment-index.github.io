@@ -10,6 +10,13 @@
 </head>
 <body>
 
+<div id="search-overlay" class="search-overlay" style="display: none;">
+      <div class="search-box">
+          <span><button class="close-search">x</button><input type="text" id="search-input" placeholder="Search for a term..." /></span>
+          <div id="search-results"></div>
+      </div>
+</div>
+
 <header class="site-header">
   <div class="header-content">
     <div class="logo">
@@ -18,12 +25,18 @@
     <nav class="nav-links">
       <a href="index.html">Home</a>
       <a href="#">About</a>
-      <a href="#"><img src="site-assets/search.svg" alt="Search" class="search-icon"></a>
+      <button class="search-button"><img src="site-assets/search.svg" alt="Search" class="search-icon"></button>
     </nav>
   </div>
 </header>
 
+
 <div class="wrapper">
+    <script>
+    const TERMS = ["USA", "Zendaya", "Apple", "Dogs", "Sabrina Carpenter", "Volodymyr Zelenskyy", "Superman", "Russell Brand", "Hakeem Jeffries", "Russia", "Economy", "Timothee Chalamet", "Batman", "Brazil", "Ford", "Eminem", "Cats", "Supreme Court", "Amazon", "Ukraine", "France", "Vladimir Putin", "Emmanuel Macron", "Narendra Modi", "Xi Jinping", "Javier Milei", "Wrestling", "Football", "Tariff", "Google", "Microsoft", "Baseball", "Pokemon", "South Korea", "Billie Eilish", "America", "Keir Starmer", "New York Times", "AOC", "Tesla", "Soccer", "Stock Market", "Dwayne Johnson", "Barbie", "Basketball", "Youtube", "Nintendo", "TV", "Walmart", "Podcasts", "Bitcoin", "Netflix", "Japan", "Star Wars", "Taylor Swift", "Harry Potter", "United Nations", "China", "LGBTQ", "UK", "NVIDIA", "Facebook", "Elon Musk", "Mike Johnson", "AI", "LeBron James", "Hockey", "Donald Trump", "Movies", "South Africa", "India", "Kendrick Lamar", "Marvel", "Rihanna", "Palestine", "Beyonce", "Democrats", "iPhone", "Nike", "Kim Kardashian", "Scott Bessent", "Anime", "Disney", "TikTok", "Egypt", "Chuck Schumer", "Marco Rubio", "Minecraft", "Congress", "Drake", "Israel", "Benjamin Netanyahu", "Eli Lilly", "OpenAI", "Sony", "Canada", "Hello Kitty", "Republicans", "NASA", "John Thune"];
+    </script>
+    <script src="site-assets/search.js"></script>
+
     <h1>Sentiment for Vladimir Putin is <span class="negative">strongly negative</span></h1>
 
     <div class="score-change">
