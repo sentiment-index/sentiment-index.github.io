@@ -53,17 +53,35 @@ def generate_index():
     <nav class="nav-links">
       <a href="index.html">Home</a>
       <a href="#">About</a>
-      <a href="#"><img src="site-assets/search.svg" alt="Search" class="search-icon"></a>
+      <button class="search-button"><img src="site-assets/search.svg" alt="Search" class="search-icon"></button>
     </nav>
   </div>
 </header>
 
 <body>
+<div id="search-overlay" class="search-overlay" style="display: none;">
+      <div class="search-box">
+          <span><button class="close-search">x</button><input type="text" id="search-input" placeholder="Search for a term..." /></span>
+          <div id="search-results"></div>
+      </div>
+</div>
+<div class="topbox">
+<h1>But how does Reddit feel about it?</h1>
+  <h2>We track sentiment across thousands of Reddit posts to show you how opinions change over time.</h2>
+</div>
 <div class="wrapper">
 
 """
 
-    html += f"<h1>Sentiment Dashboard for {today}</h1>"
+    terms_list = get_term_list()
+    terms_json = str(terms_list).replace("'", '"')
+
+    html += f"""
+    <script>
+    const TERMS = {terms_json};
+    </script>
+    <script src="site-assets/search.js"></script>
+    """
 
     def build_row(title, entries, key, is_change=False):
         nonlocal html
@@ -124,6 +142,9 @@ def generate_term_page(term: str):
     today_score = avg_data.get(str(today), 0.0)
     yesterday_score = avg_data.get(str(yesterday), 0.0)
 
+    terms_list = get_term_list()
+    terms_json = str(terms_list).replace("'", '"')
+
     change = today_score - yesterday_score
 
     descriptor = ""
@@ -169,6 +190,13 @@ def generate_term_page(term: str):
 </head>
 <body>
 
+<div id="search-overlay" class="search-overlay" style="display: none;">
+      <div class="search-box">
+          <span><button class="close-search">x</button><input type="text" id="search-input" placeholder="Search for a term..." /></span>
+          <div id="search-results"></div>
+      </div>
+</div>
+
 <header class="site-header">
   <div class="header-content">
     <div class="logo">
@@ -177,12 +205,18 @@ def generate_term_page(term: str):
     <nav class="nav-links">
       <a href="index.html">Home</a>
       <a href="#">About</a>
-      <a href="#"><img src="site-assets/search.svg" alt="Search" class="search-icon"></a>
+      <button class="search-button"><img src="site-assets/search.svg" alt="Search" class="search-icon"></button>
     </nav>
   </div>
 </header>
 
+
 <div class="wrapper">
+    <script>
+    const TERMS = {terms_json};
+    </script>
+    <script src="site-assets/search.js"></script>
+
     <h1>Sentiment for {term} is <span class="{descriptor_class}">{descriptor}</span></h1>
 
     <div class="score-change">

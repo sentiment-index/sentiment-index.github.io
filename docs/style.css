@@ -18,6 +18,7 @@ h1 {
   text-align: center;
   font-family: "Arial Black";
   font-style: italic;
+  font-size: 36pt;
   color: #183660;
 }
 
@@ -118,13 +119,13 @@ a {
 .site-header {
   width: 100%;
   background: #faf7eb;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+  /*box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);*/
   padding: 10px 0;
 }
 
 .header-content {
   width: 100%;
-  max-width: 1200px;
+  max-width: 90%;
   margin: 0 auto;
   padding: 0 30px;
   display: flex;
@@ -135,7 +136,7 @@ a {
 .logo img {
   height: 40px;
   width: auto;
-  max-width: 150px; /* prevents super wide logos */
+  max-width: 150px;
   object-fit: contain;
 }
 
@@ -187,3 +188,91 @@ a {
     font-size: 2.5rem;
     font-weight: bold;
 }
+
+.topbox {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 40px;
+}
+
+
+#search-input {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 20px;
+    outline: none;
+}
+
+#search-results {
+    margin-top: 10px;
+}
+
+.search-result-link {
+    display: block;
+    margin: 5px 0;
+    font-size: 18px;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+.search-result-link:hover {
+    text-decoration: underline;
+}
+
+
+.hidden {
+  display: none;
+}
+
+#search-overlay {
+  font-size: 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.search-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 25%;
+  width: 50%;
+  background: #faf7eb;
+  margin-top: 100px;
+  max-height: 100%;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.close-search {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  background: #faf7eb;
+  border: none;
+  border-radius: 60px;
+  width: 60px;
+  height: 60px;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.search-button {
+  background: #00000000;
+  border: none;
+}
+
+
