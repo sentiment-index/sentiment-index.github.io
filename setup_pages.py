@@ -61,7 +61,7 @@ def generate_index():
 <body>
 <div id="search-overlay" class="search-overlay" style="display: none;">
       <div class="search-box">
-          <span><button class="close-search">x</button><input type="text" id="search-input" placeholder="Search for a term..." /></span>
+          <span><button class="close-search">X</button><input type="text" id="search-input" placeholder="Search for a term..." /></span>
           <div id="search-results"></div>
       </div>
 </div>
@@ -192,7 +192,7 @@ def generate_term_page(term: str):
 
 <div id="search-overlay" class="search-overlay" style="display: none;">
       <div class="search-box">
-          <span><button class="close-search">x</button><input type="text" id="search-input" placeholder="Search for a term..." /></span>
+          <span><button class="close-search">X</button><input type="text" id="search-input" placeholder="Search for a term..." /></span>
           <div id="search-results"></div>
       </div>
 </div>

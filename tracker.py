@@ -26,8 +26,8 @@ def ensure_term_dir(term: str):
 
 def search_reddit(keyword: str, limit: int = 100) -> List[Submission]:
     reddit = praw.Reddit(
-        client_id=my_secrets.client_id,
-        client_secret=my_secrets.client_secret,
+        client_id=os.getenv('REDDIT_CLIENT_ID'),
+        client_secret=os.getenv('REDDIT_CLIENT_SECRET'),
         user_agent="crawler"
     )
     return list(reddit.subreddit("all").search(keyword, limit=limit, sort="hot"))
