@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'Arial Black';
+    src: url("site-assets/arial_black.ttf");
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
