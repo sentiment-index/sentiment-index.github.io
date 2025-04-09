@@ -1,5 +1,6 @@
 import os
 import pickle
+import re
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, date
 from typing import List, Dict, Set
@@ -9,10 +10,18 @@ import praw
 from praw.models import Submission
 from transformers import pipeline
 
+# import my_secrets
+
 SENTIMENT_BASE_DIR = "./sentiment-files"
 DAYS = 365
 
 sentiment_pipeline = pipeline("sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment")
+
+reddit = praw.Reddit(
+    client_id=os.getenv('REDDIT_CLIENT_ID'), # or my_secrets.client_id,
+    client_secret=os.getenv('REDDIT_CLIENT_SECRET'), #  or my_secrets.client_secret,
+    user_agent="crawler"
+)
 
 @dataclass
 class RawData:
@@ -25,11 +34,6 @@ def ensure_term_dir(term: str):
     return term_dir
 
 def search_reddit(keyword: str, limit: int = 100) -> List[Submission]:
-    reddit = praw.Reddit(
-        client_id=os.getenv('REDDIT_CLIENT_ID'),
-        client_secret=os.getenv('REDDIT_CLIENT_SECRET'),
-        user_agent="crawler"
-    )
     return list(reddit.subreddit("all").search(keyword, limit=limit, sort="hot"))
 
 
@@ -142,6 +146,22 @@ def get_term_list() -> List[str]:
     if not os.path.exists(SENTIMENT_BASE_DIR):
         return []
     return os.listdir(SENTIMENT_BASE_DIR)
+
+def get_newsworthy_terms(term_list: List[str]) -> List[str]:
+    def replace_symbols_with_space(text):
+        return re.sub(r'[^a-zA-Z0-9]', ' ', text)
+
+    post_string = " ----\n ".join([
+        " "+replace_symbols_with_space(post.title.lower()) + " \n " + (replace_symbols_with_space(post.selftext.lower()) or "")+" "
+        for post in reddit.subreddit("all").hot(limit=1000)
+    ])
+
+    # print(post_string)
+
+    sorted_term_list = sorted(term_list, key=lambda term: post_string.count(" "+term.lower()+" "), reverse=True)
+
+    return sorted_term_list[:6]
+
 
 if __name__ == "__main__":
     """start = time.time()

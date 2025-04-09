@@ -2,7 +2,7 @@ import os
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from tracker import get_term_list, load_avg_sentiment_scores
+from tracker import get_term_list, load_avg_sentiment_scores, get_newsworthy_terms
 
 HTML_BASE_DIR = "docs"
 
@@ -84,7 +84,9 @@ def generate_about():
 def generate_index():
     term_scores = []
 
-    for term in get_term_list():
+    term_list = get_term_list()
+
+    for term in term_list:
         avg_data = load_avg_sentiment_scores(term)
         today = datetime.now(ZoneInfo("UTC")).date()
         yesterday = today - timedelta(days=1)
@@ -105,10 +107,13 @@ def generate_index():
             "change": change,
         })
 
-    top_movers = sorted(term_scores, key=lambda x: -x["change"])[:3]
-    bottom_movers = sorted(term_scores, key=lambda x: x["change"])[:3]
+    newsworthy_terms = get_newsworthy_terms(term_list)
+
+    top_movers = sorted([term_score for term_score in term_scores if term_score["today_score"]>-0.15], key=lambda x: -x["change"])[:3]
+    bottom_movers = sorted([term_score for term_score in term_scores if term_score["today_score"]<0.15], key=lambda x: x["change"])[:3]
     top_terms = sorted(term_scores, key=lambda x: -x["today_score"])[:3]
     bottom_terms = sorted(term_scores, key=lambda x: x["today_score"])[:3]
+    in_the_news = [term_score for term_score in term_scores if term_score["term"] in newsworthy_terms]
 
     html = """
 <link rel="stylesheet" href="style.css">
@@ -182,6 +187,7 @@ def generate_index():
             """
         html += "</div></div>"
 
+    build_row("In the News", in_the_news, "change", is_change=True)
     build_row("Top Movers Today", top_movers, "change", is_change=True)
     build_row("Bottom Movers Today", bottom_movers, "change", is_change=True)
     build_row("Top Terms", top_terms, "today_score", is_change=False)
