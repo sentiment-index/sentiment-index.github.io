@@ -1,20 +1,9 @@
 
 
- - [ ] Serializing Data
-    - [ ] Store everything in ./sentiment-files/<TERM>/
-    - [ ] That dir contains scores-raw.pkl and scores-avg.pkl
-    - [ ] scores-raw.pkl should contain:
-        - [ ] Each post that contributes to the score, indexed by the day it was posted,
-        - [ ] The sentiment score for each of those posts
-    - [ ] scores-avg.pkl should contain:
-        - [ ] The average sentiment score by day for each day in the last 365 days
-        - [ ] This score should be smoothed over multiple days (making sure to weight days by # of posts on that day)
- - [ ] Updating Sentiment
-    - [ ] There should be a universal update function that keeps track of all the terms
-    - [ ] When this function is run, for each term, it should:
-        - [ ] Fetch 100 Reddit posts from search
-        - [ ] Add them into the relevant scores-raw.pkl if they're not already included
-        - [ ] Recompute the last 365 days of average sentiment scores in scores-avg.pkl
- - [ ] Other Utility Functions
-    - [ ] Function to add a new term to track (T/F parameter if it should populate it with 100 Reddit posts right away)
-    - [ ] Function to get the current avg sentiment index for a particular term
+ - [ ] Improve CSS/graphics
+    - [X] Make fonts bigger on mobile
+    - [ ] Replace SVG logo with HQ png (so that the font renders properly on mobile)
+ - [ ] Pages
+    - [ ] Add index of every term with score/changes
+ - [ ] Search
+    - [ ] Improve sort to prefer earlier indices
