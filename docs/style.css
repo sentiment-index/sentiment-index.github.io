@@ -287,11 +287,12 @@ a {
   height: 100px;
 }
 
-@media (max-width: 768px), (pointer:none), (pointer:coarse) {
+@media (max-width: 1068px), (pointer:none), (pointer:coarse) {
   h1, h2, .term-name, .nav-links a {
-    font-family: Arial, sans-serif;
-    font-weight: bold;
+    /* font-family: Arial, sans-serif;*/
     font-style: italic;
+    font-weight: normal;
+
   }
   .wrapper {
     margin: 20px;
@@ -299,31 +300,58 @@ a {
   }
 
   h1 {
-    font-size: 28pt;
+    font-size: 42pt;
   }
 
   h2 {
-    font-size: 20pt;
+    font-size: 28pt;
   }
+
+  .topbox h2 {
+    font-size: 24pt;
+    font-weight: bolder;
+  }
+
   body {
     font-size: 20px;
   }
 
   .card {
     flex: 0 0 90%;
-    padding: 15px;
+    padding: 30px;
   }
 
-  .header-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 0 20px;
+  .score-value {
+    font-size: 28pt;
   }
 
+  .score-change {
+    font-size: 18pt;
+  }
+
+  .term-name {
+    font-size: 36pt;
+  }
+
+  .nav-links a {
+    font-size: 24pt;
+  }
+
+
+  .search-icon {
+    height: 36px;
+    width: 36px;
+  }
 
   .row {
     gap: 15px;
   }
 
+  #search-input {
+    font-size: 22pt;
+  }
+
+  .search-result-link {
+    font-size: 20pt;
+  }
 }
