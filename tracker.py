@@ -145,7 +145,7 @@ def load_avg_sentiment_scores(term):
 def get_term_list() -> List[str]:
     if not os.path.exists(SENTIMENT_BASE_DIR):
         return []
-    return os.listdir(SENTIMENT_BASE_DIR)
+    return [term for term in os.listdir(SENTIMENT_BASE_DIR) if not term.startswith(".")]
 
 def get_newsworthy_terms(term_list: List[str]) -> List[str]:
     def replace_symbols_with_space(text):

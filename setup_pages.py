@@ -1,5 +1,6 @@
 import os
 from datetime import datetime, timedelta
+from typing import List, Dict, Union
 from zoneinfo import ZoneInfo
 
 from tracker import get_term_list, load_avg_sentiment_scores, get_newsworthy_terms
@@ -28,6 +29,7 @@ def generate_about():
     </div>
     <nav class="nav-links">
       <a href="index.html">Home</a>
+      <a href="term-list.html">List</a>
       <a href="about.html">About</a>
       <button class="search-button"><img src="site-assets/search.svg" alt="Search" class="search-icon"></button>
     </nav>
@@ -129,6 +131,7 @@ def generate_index():
     </div>
     <nav class="nav-links">
       <a href="index.html">Home</a>
+      <a href="term-list.html">List</a>
       <a href="about.html">About</a>
       <button class="search-button"><img src="site-assets/search.svg" alt="Search" class="search-icon"></button>
     </nav>
@@ -203,6 +206,8 @@ def generate_index():
 
     with open(os.path.join(HTML_BASE_DIR, "index.html"), "w", encoding="utf-8") as f:
         f.write(html)
+
+    return term_scores
 
 
 def generate_term_page(term: str):
@@ -284,7 +289,9 @@ def generate_term_page(term: str):
     </div>
     <nav class="nav-links">
       <a href="index.html">Home</a>
+      <a href="term-list.html">List</a>
       <a href="about.html">About</a>
+
       <button class="search-button"><img src="site-assets/search.svg" alt="Search" class="search-icon"></button>
     </nav>
   </div>
@@ -386,8 +393,141 @@ def generate_term_page(term: str):
         f.write(html)
 
 
+
+def generate_term_list(term_list: List[str], term_scores: List[Dict[str, Union[str, float]]]):
+    terms_json = str(term_list).replace("'", '"')
+
+    html = f"""
+<link rel="stylesheet" href="style.css">
+<html>
+<head>
+    <link rel="icon" type="image/x-icon" href="site-assets/favicon.svg">
+    <script>const TERMS = {terms_json};</script>
+    <script>
+    function sortTable(n, isNumeric=false) {{
+      var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+      table = document.getElementById("termsTable");
+      switching = true;
+      dir = "asc"; 
+      while (switching) {{
+        switching = false;
+        rows = table.rows;
+        for (i = 1; i < (rows.length - 1); i++) {{
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("TD")[n];
+          y = rows[i + 1].getElementsByTagName("TD")[n];
+          if (isNumeric) {{
+            if ((dir == "asc" && parseFloat(x.innerHTML) > parseFloat(y.innerHTML)) ||
+                (dir == "desc" && parseFloat(x.innerHTML) < parseFloat(y.innerHTML))) {{
+              shouldSwitch = true;
+              break;
+            }}
+          }} else {{
+            if ((dir == "asc" && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) ||
+                (dir == "desc" && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase())) {{
+              shouldSwitch = true;
+              break;
+            }}
+          }}
+        }}
+        if (shouldSwitch) {{
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+          switchcount++;
+        }} else {{
+          if (switchcount == 0 && dir == "asc") {{
+            dir = "desc";
+            switching = true;
+          }}
+        }}
+      }}
+    }}
+    </script>
+</head>
+
+<header class="site-header">
+  <div class="header-content">
+    <div class="logo">
+      <img src="site-assets/logo.svg" alt="Logo">
+    </div>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="term-list.html">List</a>
+      <a href="about.html">About</a>
+      <button class="search-button"><img src="site-assets/search.svg" alt="Search" class="search-icon"></button>
+    </nav>
+  </div>
+</header>
+
+<body>
+<div id="search-overlay" class="search-overlay" style="display: none;">
+      <div class="search-box">
+          <span><button class="close-search">X</button><input type="text" id="search-input" placeholder="Search for a term..." /></span>
+          <div id="search-results"></div>
+      </div>
+</div>
+
+<div class="topbox">
+<h1>All Tracked Terms</h1>
+<h2>Click a header to sort alphabetically, by score, or by daily change.</h2>
+</div>
+
+<div class="table-wrapper">
+<table id="termsTable">
+<thead>
+<tr>
+    <th onclick="sortTable(0, false)"><span>Term</span><span><img src="site-assets/tablearrows.svg" alt="table arrows"></span></th>
+    <th onclick="sortTable(1, true)"><span>Today's Score</span><span><img src="site-assets/tablearrows.svg" alt="table arrows"></span></th>
+    <th onclick="sortTable(2, true)"><span>Change From Yesterday</span><span><img src="site-assets/tablearrows.svg" alt="table arrows"></span></th>
+</tr>
+</thead>
+<tbody>
+"""
+
+    for entry in term_scores:
+        term = entry['term']
+        today_score_val = entry['today_score']
+        change_val = entry['change']
+
+        today_score = f"{today_score_val:.2f}"
+        arrow = "↑" if change_val >= 0 else "↓"
+        change = f"{change_val:+.2f}{arrow}"
+
+        score_class = "positive" if today_score_val >= 0 else "negative"
+        change_class = "positive" if change_val >= 0 else "negative"
+
+        html += f"""
+    <tr>
+        <td><a href="{term_to_url(term)}">{term}</a></td>
+        <td class="{score_class}">{today_score}</td>
+        <td class="{change_class}">{change}</td>
+    </tr>
+    """
+
+    html += f"""
+</tbody>
+</table>
+</div>
+
+<div class="timenote">Last updated {datetime.now().strftime("%I:%M%p on %B %d, %Y")}</div>
+
+<script src="site-assets/search.js"></script>
+
+</body>
+</html>
+"""
+
+    output_path = os.path.join(HTML_BASE_DIR, term_to_url("term-list"))
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
+    with open(output_path, "w", encoding="utf-8") as f:
+        f.write(html)
+
+
 if __name__ == "__main__":
-    generate_index()
+    term_list = get_term_list()
+    term_scores = generate_index()
     generate_about()
-    for term in get_term_list():
+    generate_term_list(term_list, term_scores)
+    for term in term_list:
         generate_term_page(term)
