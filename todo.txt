@@ -1,9 +1,9 @@
 
 
  - [ ] Improve CSS/graphics
-    - [X] Make fonts bigger on mobile
+    - [x] Make fonts bigger on mobile
     - [x] Convert SVG font to path in logo
- - [ ] Pages
-    - [ ] Add index of every term with score/changes
+ - [x] Pages
+    - [x] Add index of every term with score/changes
  - [ ] Search
     - [ ] Improve sort to prefer earlier indices
