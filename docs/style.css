@@ -339,7 +339,6 @@ th img {
 }
 
 
-
 @media (max-width: 1068px), (pointer:none), (pointer:coarse) {
   h1, h2, .term-name, .nav-links a {
     /* font-family: Arial, sans-serif;*/
@@ -366,7 +365,6 @@ th img {
 
   .topbox h2 {
     font-size: 24pt;
-    font-weight: bolder;
   }
 
   body {
@@ -379,21 +377,24 @@ th img {
   }
 
   .score-value {
-    font-size: 28pt;
+    font-size: 32pt;
   }
 
   .score-change {
+    font-size: 24pt;
+  }
+
+  .score-label {
     font-size: 18pt;
   }
 
   .term-name {
-    font-size: 36pt;
+    font-size: 42pt;
   }
 
   .nav-links a {
-    font-size: 24pt;
+    font-size: 30pt;
   }
-
 
   .search-icon {
     height: 36px;
@@ -409,6 +410,31 @@ th img {
   }
 
   .search-result-link {
+    font-size: 26pt;
+  }
+
+  table {
+    min-width: 95%;
+    font-size: 24pt;
+  }
+
+  .timenote {
     font-size: 20pt;
+  }
+
+  #sentimentChart {
+    height: 1600px;
+  }
+
+  .score {
+    font-size: 48pt;
+  }
+
+  .change {
+    font-size: 48pt;
+  }
+
+  .label {
+    font-size: 26pt;
   }
 }

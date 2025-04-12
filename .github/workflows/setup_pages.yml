@@ -53,5 +53,5 @@ jobs:
         else
           TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
           git commit -m "Update generated pages: ${TIMESTAMP}"
-          git push --force
+          git push
         fi
