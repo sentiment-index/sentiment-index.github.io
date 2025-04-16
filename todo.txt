@@ -5,5 +5,9 @@
     - [x] Convert SVG font to path in logo
  - [x] Pages
     - [x] Add index of every term with score/changes
+        - [x] Make score listings to 3 digits on the list page
  - [ ] Search
-    - [ ] Improve sort to prefer earlier indices
+    - [x] Improve sort to prefer earlier indices
+ - [x] Switch data storage to JSON
+ - [x] Add comments to scores
+ - [x] Store post hashes instead of raw posts

@@ -22,7 +22,7 @@ document.getElementById("search-input").addEventListener("input", function () {
         return;
     }
 
-    const matchingTerms = TERMS.filter(term => term.toLowerCase().includes(query)).slice(0,10);
+    const matchingTerms = TERMS.filter(term => term.toLowerCase().includes(query)).sort((a,b) => a.toLowerCase().indexOf(query) - b.toLowerCase().indexOf(query)).slice(0,10);
 
     matchingTerms.forEach(term => {
         const link = document.createElement("a");

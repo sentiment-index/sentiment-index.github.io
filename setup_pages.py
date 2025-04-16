@@ -489,7 +489,7 @@ def generate_term_list(term_list: List[str], term_scores: List[Dict[str, Union[s
         today_score_val = entry['today_score']
         change_val = entry['change']
 
-        today_score = f"{today_score_val:.2f}"
+        today_score = f"{today_score_val:.3f}"
         arrow = "↑" if change_val >= 0 else "↓"
         change = f"{change_val:+.2f}{arrow}"
 
