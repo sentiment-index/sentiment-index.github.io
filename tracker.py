@@ -12,14 +12,16 @@ import praw
 from praw.models import Submission
 from transformers import pipeline
 
+import my_secrets
+
 SENTIMENT_BASE_DIR = "./sentiment-files"
 DAYS = 365
 
 sentiment_pipeline = pipeline("sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment")
 
 reddit = praw.Reddit(
-    client_id=os.getenv('REDDIT_CLIENT_ID'), # or my_secrets.client_id,
-    client_secret=os.getenv('REDDIT_CLIENT_SECRET'), # or my_secrets.client_secret,
+    client_id=os.getenv('REDDIT_CLIENT_ID') or my_secrets.client_id,
+    client_secret=os.getenv('REDDIT_CLIENT_SECRET') or my_secrets.client_secret,
     user_agent="crawler"
 )
 
@@ -87,25 +89,32 @@ def compute_smoothed_avg(raw_data: Dict[str, List[float]]) -> Dict[str, float]:
     date_range = [today - timedelta(days=i) for i in range(DAYS)]
     smoothed = {}
 
+    MIN_POSTS_FOR_AVG = 10
+    MIN_INITIAL_DAYS = 4
+    MAX_LOOKBACK_DAYS = 30
+
     for date in date_range:
         weighted_sum = 0
         total_posts = 0
-        for offset in range(-4, 1):
+        for offset in range(-MIN_INITIAL_DAYS, 1):
             nearby_date = date + timedelta(days=offset)
             key = str(nearby_date)
             if key in raw_data:
                 posts = raw_data[key]
                 weighted_sum += sum(posts)
                 total_posts += len(posts)
-        if total_posts <= 5:
-            for offset in range(-8, -4):
+        if total_posts < MIN_POSTS_FOR_AVG:
+            for offset in range(-MIN_INITIAL_DAYS - 1, -MAX_LOOKBACK_DAYS - 1, -1):
                 nearby_date = date + timedelta(days=offset)
                 key = str(nearby_date)
                 if key in raw_data:
                     posts = raw_data[key]
                     weighted_sum += sum(posts)
                     total_posts += len(posts)
-        smoothed[str(date)] = weighted_sum / total_posts if total_posts > 5 else 0.0
+                if total_posts >= MIN_POSTS_FOR_AVG:
+                    break
+
+        smoothed[str(date)] = weighted_sum / total_posts if total_posts > MIN_POSTS_FOR_AVG else 0.0
 
     return smoothed
 

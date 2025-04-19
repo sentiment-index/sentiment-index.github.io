@@ -304,7 +304,7 @@ def generate_term_page(term: str):
     </script>
     <script src="site-assets/search.js"></script>
 
-    <h1>Sentiment for {term} is <span class="{descriptor_class}">{descriptor}</span></h1>
+    <h1>Sentiment for “{term}” is <span class="{descriptor_class}">{descriptor}</span></h1>
 
     <div class="score-change">
         <div class="score-block">
@@ -404,44 +404,40 @@ def generate_term_list(term_list: List[str], term_scores: List[Dict[str, Union[s
     <link rel="icon" type="image/x-icon" href="site-assets/favicon.svg">
     <script>const TERMS = {terms_json};</script>
     <script>
-    function sortTable(n, isNumeric=false) {{
-      var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-      table = document.getElementById("termsTable");
-      switching = true;
-      dir = "asc"; 
-      while (switching) {{
-        switching = false;
-        rows = table.rows;
-        for (i = 1; i < (rows.length - 1); i++) {{
-          shouldSwitch = false;
-          x = rows[i].getElementsByTagName("TD")[n];
-          y = rows[i + 1].getElementsByTagName("TD")[n];
-          if (isNumeric) {{
-            if ((dir == "asc" && parseFloat(x.innerHTML) > parseFloat(y.innerHTML)) ||
-                (dir == "desc" && parseFloat(x.innerHTML) < parseFloat(y.innerHTML))) {{
-              shouldSwitch = true;
-              break;
-            }}
-          }} else {{
-            if ((dir == "asc" && x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) ||
-                (dir == "desc" && x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase())) {{
-              shouldSwitch = true;
-              break;
-            }}
-          }}
-        }}
-        if (shouldSwitch) {{
-          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-          switching = true;
-          switchcount++;
-        }} else {{
-          if (switchcount == 0 && dir == "asc") {{
-            dir = "desc";
-            switching = true;
-          }}
-        }}
-      }}
+function sortTable(columnIndex, isNumeric = false) {{
+  const table = document.getElementById("termsTable");
+  const tbody = table.tBodies[0];
+  const rowsArray = Array.from(tbody.rows);
+  const header = table.rows[0].cells[columnIndex];
+  const currentDir = header.getAttribute("data-dir") || "asc";
+  const newDir = currentDir === "asc" ? "desc" : "asc";
+  header.setAttribute("data-dir", newDir);
+
+  const comparator = (rowA, rowB) => {{
+    const cellA = rowA.cells[columnIndex].innerText.trim();
+    const cellB = rowB.cells[columnIndex].innerText.trim();
+
+    const aIsNegative = cellA.startsWith("-");
+    const bIsNegative = cellB.startsWith("-");
+
+    if (!aIsNegative && bIsNegative) return newDir === "asc" ? 1 : -1;
+    if (aIsNegative && !bIsNegative) return newDir === "asc" ? -1 : 1;
+
+    if (isNumeric) {{
+      const aVal = parseFloat(cellA);
+      const bVal = parseFloat(cellB);
+      return newDir === "asc" ? aVal - bVal : bVal - aVal;
+    }} else {{
+      return newDir === "asc"
+        ? cellA.localeCompare(cellB)
+        : cellB.localeCompare(cellA);
     }}
+  }};
+
+  rowsArray.sort(comparator);
+
+  rowsArray.forEach(row => tbody.appendChild(row));
+}}
     </script>
 </head>
 
@@ -491,7 +487,7 @@ def generate_term_list(term_list: List[str], term_scores: List[Dict[str, Union[s
 
         today_score = f"{today_score_val:.3f}"
         arrow = "↑" if change_val >= 0 else "↓"
-        change = f"{change_val:+.2f}{arrow}"
+        change = f"{change_val:+.3f}{arrow}"
 
         score_class = "positive" if today_score_val >= 0 else "negative"
         change_class = "positive" if change_val >= 0 else "negative"

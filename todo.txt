@@ -6,6 +6,7 @@
  - [x] Pages
     - [x] Add index of every term with score/changes
         - [x] Make score listings to 3 digits on the list page
+        - [x] Fix +/- sort order
  - [ ] Search
     - [x] Improve sort to prefer earlier indices
  - [x] Switch data storage to JSON
