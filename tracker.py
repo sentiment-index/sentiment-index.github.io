@@ -12,16 +12,14 @@ import praw
 from praw.models import Submission
 from transformers import pipeline
 
-import my_secrets
-
 SENTIMENT_BASE_DIR = "./sentiment-files"
 DAYS = 365
 
 sentiment_pipeline = pipeline("sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment")
 
 reddit = praw.Reddit(
-    client_id=os.getenv('REDDIT_CLIENT_ID') or my_secrets.client_id,
-    client_secret=os.getenv('REDDIT_CLIENT_SECRET') or my_secrets.client_secret,
+    client_id=os.getenv('REDDIT_CLIENT_ID'), # or my_secrets.client_id,
+    client_secret=os.getenv('REDDIT_CLIENT_SECRET'), # or my_secrets.client_secret,
     user_agent="crawler"
 )
 
