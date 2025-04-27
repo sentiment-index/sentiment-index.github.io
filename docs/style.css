@@ -338,6 +338,16 @@ th img {
   max-height: 15px;
 }
 
+.row-icon {
+  max-height: 24pt;
+  min-width: 30pt;
+}
+
+.row-header {
+  display: flex;
+  max-width: 80%;
+}
+
 
 @media (max-width: 1068px), (pointer:none), (pointer:coarse) {
   h1, h2, .term-name, .nav-links a {
@@ -361,6 +371,10 @@ th img {
 
   h2 {
     font-size: 28pt;
+  }
+
+  .row-icon {
+    max-height: 30pt;
   }
 
   .topbox h2 {

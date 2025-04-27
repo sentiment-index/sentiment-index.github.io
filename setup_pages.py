@@ -163,9 +163,9 @@ def generate_index():
     <script src="site-assets/search.js"></script>
     """
 
-    def build_row(title, entries, key, is_change=False):
+    def build_row(title, entries, key, icon_name, is_change=False):
         nonlocal html
-        html += f"<div class='section'><h2>{title}</h2><div class='row'>"
+        html += f"<div class='section'><div class='row-header'><img src='{icon_name}' class='row-icon'><h2>{title}</h2></div><div class='row'>"
         for entry in entries:
             score = entry[key]
             color_class = "positive" if score >= 0 else "negative"
@@ -190,11 +190,11 @@ def generate_index():
             """
         html += "</div></div>"
 
-    build_row("In the News", in_the_news, "change", is_change=True)
-    build_row("Top Movers Today", top_movers, "change", is_change=True)
-    build_row("Bottom Movers Today", bottom_movers, "change", is_change=True)
-    build_row("Top Terms", top_terms, "today_score", is_change=False)
-    build_row("Bottom Terms", bottom_terms, "today_score", is_change=False)
+    build_row("Popular Today", in_the_news, "change", "site-assets/rsi-hot.svg", is_change=True)
+    build_row("Top Movers Today", top_movers, "change", "site-assets/rsi-moving-up.svg", is_change=True)
+    build_row("Bottom Movers Today", bottom_movers, "change", "site-assets/rsi-moving-down.svg", is_change=True)
+    build_row("Top Terms", top_terms, "today_score", "site-assets/rsi-top.svg", is_change=False)
+    build_row("Bottom Terms", bottom_terms, "today_score", "site-assets/rsi-bottom.svg", is_change=False)
 
     html += f"""
 </div>
@@ -527,3 +527,4 @@ if __name__ == "__main__":
     generate_term_list(term_list, term_scores)
     for term in term_list:
         generate_term_page(term)
+
