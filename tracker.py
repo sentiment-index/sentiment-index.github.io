@@ -52,12 +52,11 @@ def search_reddit(keyword: str, limit: int = 100) -> List[Tuple[str, float]]:
     posts = list(reddit.subreddit("all").search(keyword, limit=limit // 2, sort="hot"))
     comments = []
 
-    for post in posts:
-        post.comment_sort = "top"
-        post.comments.replace_more(limit=0)
-        if post.comments:
-            top_comment = post.comments[0]
-            comments.append(top_comment)
+    post = posts[0]
+    post.comment_sort = "top"
+    post.comments.replace_more(limit=0)
+    if post.comments:
+        comments = post.comments[0:min(len(post.comments), limit // 2)]
 
     combined_texts = [(post.title+"\n"+post.selftext, post.created_utc) for post in posts] + [(comment.body, comment.created_utc) for comment in comments]
 
