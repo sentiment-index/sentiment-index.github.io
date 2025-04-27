@@ -5,14 +5,13 @@ import json
 import time
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta, date
-from typing import List, Dict, Set
+from typing import List, Dict, Set, Tuple
 from zoneinfo import ZoneInfo
 
 import praw
 from praw.models import Submission
 from transformers import pipeline
 
-import my_secrets
 
 SENTIMENT_BASE_DIR = "./sentiment-files"
 DAYS = 365
@@ -21,8 +20,8 @@ DAYS = 365
 sentiment_pipeline = pipeline("sentiment-analysis", model="nlptown/bert-base-multilingual-uncased-sentiment")
 
 reddit = praw.Reddit(
-    client_id=os.getenv('REDDIT_CLIENT_ID') or my_secrets.client_id,
-    client_secret=os.getenv('REDDIT_CLIENT_SECRET') or my_secrets.client_secret,
+    client_id=os.getenv('REDDIT_CLIENT_ID'), # or my_secrets.client_id,
+    client_secret=os.getenv('REDDIT_CLIENT_SECRET'), # or my_secrets.client_secret,
     user_agent="crawler"
 )
 
@@ -49,8 +48,20 @@ def ensure_term_dir(term: str):
     os.makedirs(term_dir, exist_ok=True)
     return term_dir
 
-def search_reddit(keyword: str, limit: int = 100) -> List[Submission]:
-    return list(reddit.subreddit("all").search(keyword, limit=limit/2, sort="hot"))+list(reddit.subreddit("all").search(keyword, limit=limit/2, sort="comments"))
+def search_reddit(keyword: str, limit: int = 100) -> List[Tuple[str, float]]:
+    posts = list(reddit.subreddit("all").search(keyword, limit=limit // 2, sort="hot"))
+    comments = []
+
+    for post in posts:
+        post.comment_sort = "top"
+        post.comments.replace_more(limit=0)
+        if post.comments:
+            top_comment = post.comments[0]
+            comments.append(top_comment)
+
+    combined_texts = [(post.title+"\n"+post.selftext, post.created_utc) for post in posts] + [(comment.body, comment.created_utc) for comment in comments]
+
+    return combined_texts
 
 def stable_hash(text: str) -> int:
     return int(hashlib.sha256(text.encode("utf-8")).hexdigest(), 16)
@@ -124,9 +135,9 @@ def update_term(term: str):
     raw_data = load_raw_data(term)
 
     for post in posts:
-        created_date = datetime.fromtimestamp(post.created_utc).date()
+        created_date = datetime.fromtimestamp(post[1]).date()
         date_key = str(created_date)
-        text = post.title + "\n" + (post.selftext or "")
+        text = post[0]
         text_hash = stable_hash(text)
 
         if text_hash not in raw_data.post_texts:
@@ -191,4 +202,4 @@ def recompute_all_smoothed_scores():
         serialize_avg_data(term, smoothed_avg)
 
 if __name__ == "__main__":
-    recompute_all_smoothed_scores()
+    pass
