@@ -51,6 +51,11 @@ def ensure_term_dir(term: str):
 def search_reddit(keyword: str, limit: int = 100) -> List[Tuple[str, float]]:
     posts = list(reddit.subreddit("all").search(keyword, limit=limit // 2, sort="hot"))
     comments = []
+    if len(posts) == 0:
+        print(f"{keyword} returned 0 results...")
+        posts = list(reddit.subreddit("all").search(keyword, limit=limit // 2))
+        if len(posts) == 0:
+            return []
 
     post = posts[0]
     post.comment_sort = "top"
