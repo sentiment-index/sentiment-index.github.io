@@ -34,23 +34,53 @@
 
 
     <script>
-    const TERMS = ["New York Times", "Republicans", "Javier Milei", "South Korea", "America", "Keir Starmer", "Russell Brand", "Ford", "AOC", "Soccer", "Kim Kardashian", "Netflix", "Hockey", "Mike Johnson", "Russia", "OpenAI", "India", "Baseball", "Ukraine", "Sony", "Japan", "Emmanuel Macron", "LeBron James", "France", "Marco Rubio", "Star Wars", "Taylor Swift", "John Thune", "Sabrina Carpenter", "NASA", "Democrats", "Google", "USA", "TV", "Podcasts", "Bitcoin", "Economy", "Marvel", "Timothee Chalamet", "Donald Trump", "Barbie", "Dogs", "Nintendo", "Billie Eilish", "LGBTQ", "Egypt", "Zendaya", "iPhone", "Eminem", "Cats", "Facebook", "Vladimir Putin", "Dwayne Johnson", "Wrestling", "Microsoft", "Basketball", "Benjamin Netanyahu", "Volodymyr Zelenskyy", "Israel", "Amazon", "Scott Bessent", "United Nations", "Stock Market", "Superman", "Drake", "Tariff", "NVIDIA", "Palestine", "Hakeem Jeffries", "Harry Potter", "UK", "Apple", "Minecraft", "Tesla", "Anime", "Kendrick Lamar", "Eli Lilly", "Pokemon", "Beyonce", "TikTok", "Batman", "Supreme Court", "Brazil", "Hello Kitty", "Movies", "Elon Musk", "Chuck Schumer", "South Africa", "Disney", "AI", "Congress", "Canada", "Walmart", "Football", "Narendra Modi", "Rihanna", "Xi Jinping", "China", "Nike", "Youtube"];
+    const TERMS = ["Hockey", "Basketball", "Eli Lilly", "Xi Jinping", "Japan", "Soccer", "John Thune", "Timothee Chalamet", "LGBTQ", "United Nations", "New York Times", "Disney", "iPhone", "Stock Market", "Star Wars", "China", "Narendra Modi", "Pokemon", "Marco Rubio", "Sabrina Carpenter", "Economy", "Republicans", "Rihanna", "Supreme Court", "South Africa", "Mike Johnson", "Tariff", "Scott Bessent", "OpenAI", "TikTok", "Tesla", "Microsoft", "Kendrick Lamar", "Hello Kitty", "Bitcoin", "TV", "Drake", "Minecraft", "Keir Starmer", "UK", "Harry Potter", "Volodymyr Zelenskyy", "Chuck Schumer", "Canada", "USA", "Barbie", "Baseball", "Google", "Taylor Swift", "Sony", "Emmanuel Macron", "Palestine", "NASA", "Wrestling", "Anime", "NVIDIA", "Walmart", "Benjamin Netanyahu", "Nike", "Billie Eilish", "Elon Musk", "Batman", "Superman", "Ukraine", "Democrats", "Brazil", "Facebook", "Youtube", "Movies", "LeBron James", "America", "South Korea", "Vladimir Putin", "France", "Amazon", "Egypt", "Netflix", "AI", "Kim Kardashian", "Dwayne Johnson", "Zendaya", "Marvel", "Podcasts", "Football", "Eminem", "Congress", "India", "Apple", "Hakeem Jeffries", "Russia", "Dogs", "Israel", "AOC", "Cats", "Beyonce", "Donald Trump", "Javier Milei", "Nintendo", "Russell Brand", "Ford"];
     </script>
     <script src="site-assets/search.js"></script>
     <div class='section'><div class='row-header'><img src='site-assets/rsi-hot.svg' class='row-icon'><h2>Popular Today</h2></div><div class='row'>
             <div class="card positive">
-                <a href="america.html">
-                    <div class="term-name">America</div>
+                <a href="japan.html">
+                    <div class="term-name">Japan</div>
                     <div class="score-section">
-                        <div class="score-value">+0.03 ↑</div>
+                        <div class="score-value">+0.02 ↑</div>
+                        <div class="score-label">Change</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="card positive">
+                <a href="anime.html">
+                    <div class="term-name">Anime</div>
+                    <div class="score-section">
+                        <div class="score-value">+0.05 ↑</div>
                         <div class="score-label">Change</div>
                     </div>
                 </a>
             </div>
             
             <div class="card negative">
-                <a href="india.html">
-                    <div class="term-name">India</div>
+                <a href="democrats.html">
+                    <div class="term-name">Democrats</div>
+                    <div class="score-section">
+                        <div class="score-value">-0.07 ↓</div>
+                        <div class="score-label">Change</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="card negative">
+                <a href="facebook.html">
+                    <div class="term-name">Facebook</div>
+                    <div class="score-section">
+                        <div class="score-value">-0.01 ↓</div>
+                        <div class="score-label">Change</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="card negative">
+                <a href="ai.html">
+                    <div class="term-name">AI</div>
                     <div class="score-section">
                         <div class="score-value">-0.02 ↓</div>
                         <div class="score-label">Change</div>
@@ -58,101 +88,71 @@
                 </a>
             </div>
             
-            <div class="card negative">
-                <a href="tv.html">
-                    <div class="term-name">TV</div>
-                    <div class="score-section">
-                        <div class="score-value">-0.00 ↓</div>
-                        <div class="score-label">Change</div>
-                    </div>
-                </a>
-            </div>
-            
-            <div class="card negative">
+            <div class="card positive">
                 <a href="dogs.html">
                     <div class="term-name">Dogs</div>
                     <div class="score-section">
-                        <div class="score-value">-0.04 ↓</div>
-                        <div class="score-label">Change</div>
-                    </div>
-                </a>
-            </div>
-            
-            <div class="card positive">
-                <a href="cats.html">
-                    <div class="term-name">Cats</div>
-                    <div class="score-section">
-                        <div class="score-value">+0.00 ↑</div>
-                        <div class="score-label">Change</div>
-                    </div>
-                </a>
-            </div>
-            
-            <div class="card positive">
-                <a href="ai.html">
-                    <div class="term-name">AI</div>
-                    <div class="score-section">
-                        <div class="score-value">+0.00 ↑</div>
+                        <div class="score-value">+0.03 ↑</div>
                         <div class="score-label">Change</div>
                     </div>
                 </a>
             </div>
             </div></div><div class='section'><div class='row-header'><img src='site-assets/rsi-moving-up.svg' class='row-icon'><h2>Top Movers Today</h2></div><div class='row'>
             <div class="card positive">
-                <a href="john-thune.html">
-                    <div class="term-name">John Thune</div>
+                <a href="xi-jinping.html">
+                    <div class="term-name">Xi Jinping</div>
                     <div class="score-section">
-                        <div class="score-value">+0.27 ↑</div>
+                        <div class="score-value">+0.11 ↑</div>
                         <div class="score-label">Change</div>
                     </div>
                 </a>
             </div>
             
             <div class="card positive">
-                <a href="vladimir-putin.html">
-                    <div class="term-name">Vladimir Putin</div>
+                <a href="russell-brand.html">
+                    <div class="term-name">Russell Brand</div>
                     <div class="score-section">
-                        <div class="score-value">+0.23 ↑</div>
+                        <div class="score-value">+0.08 ↑</div>
                         <div class="score-label">Change</div>
                     </div>
                 </a>
             </div>
             
             <div class="card positive">
-                <a href="barbie.html">
-                    <div class="term-name">Barbie</div>
+                <a href="volodymyr-zelenskyy.html">
+                    <div class="term-name">Volodymyr Zelenskyy</div>
                     <div class="score-section">
-                        <div class="score-value">+0.15 ↑</div>
+                        <div class="score-value">+0.07 ↑</div>
                         <div class="score-label">Change</div>
                     </div>
                 </a>
             </div>
             </div></div><div class='section'><div class='row-header'><img src='site-assets/rsi-moving-down.svg' class='row-icon'><h2>Bottom Movers Today</h2></div><div class='row'>
             <div class="card negative">
+                <a href="javier-milei.html">
+                    <div class="term-name">Javier Milei</div>
+                    <div class="score-section">
+                        <div class="score-value">-0.24 ↓</div>
+                        <div class="score-label">Change</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="card negative">
+                <a href="billie-eilish.html">
+                    <div class="term-name">Billie Eilish</div>
+                    <div class="score-section">
+                        <div class="score-value">-0.15 ↓</div>
+                        <div class="score-label">Change</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="card negative">
                 <a href="scott-bessent.html">
                     <div class="term-name">Scott Bessent</div>
                     <div class="score-section">
-                        <div class="score-value">-0.22 ↓</div>
-                        <div class="score-label">Change</div>
-                    </div>
-                </a>
-            </div>
-            
-            <div class="card negative">
-                <a href="eli-lilly.html">
-                    <div class="term-name">Eli Lilly</div>
-                    <div class="score-section">
                         <div class="score-value">-0.08 ↓</div>
-                        <div class="score-label">Change</div>
-                    </div>
-                </a>
-            </div>
-            
-            <div class="card negative">
-                <a href="tariff.html">
-                    <div class="term-name">Tariff</div>
-                    <div class="score-section">
-                        <div class="score-value">-0.06 ↓</div>
                         <div class="score-label">Change</div>
                     </div>
                 </a>
@@ -162,7 +162,7 @@
                 <a href="sabrina-carpenter.html">
                     <div class="term-name">Sabrina Carpenter</div>
                     <div class="score-section">
-                        <div class="score-value">+0.65 </div>
+                        <div class="score-value">+0.58 </div>
                         <div class="score-label">Score</div>
                     </div>
                 </a>
@@ -172,37 +172,27 @@
                 <a href="barbie.html">
                     <div class="term-name">Barbie</div>
                     <div class="score-section">
-                        <div class="score-value">+0.55 </div>
+                        <div class="score-value">+0.54 </div>
                         <div class="score-label">Score</div>
                     </div>
                 </a>
             </div>
             
             <div class="card positive">
-                <a href="harry-potter.html">
-                    <div class="term-name">Harry Potter</div>
+                <a href="hello-kitty.html">
+                    <div class="term-name">Hello Kitty</div>
                     <div class="score-section">
-                        <div class="score-value">+0.38 </div>
+                        <div class="score-value">+0.46 </div>
                         <div class="score-label">Score</div>
                     </div>
                 </a>
             </div>
             </div></div><div class='section'><div class='row-header'><img src='site-assets/rsi-bottom.svg' class='row-icon'><h2>Bottom Terms</h2></div><div class='row'>
             <div class="card negative">
-                <a href="hakeem-jeffries.html">
-                    <div class="term-name">Hakeem Jeffries</div>
-                    <div class="score-section">
-                        <div class="score-value">-0.68 </div>
-                        <div class="score-label">Score</div>
-                    </div>
-                </a>
-            </div>
-            
-            <div class="card negative">
                 <a href="scott-bessent.html">
                     <div class="term-name">Scott Bessent</div>
                     <div class="score-section">
-                        <div class="score-value">-0.64 </div>
+                        <div class="score-value">-0.81 </div>
                         <div class="score-label">Score</div>
                     </div>
                 </a>
@@ -212,7 +202,17 @@
                 <a href="supreme-court.html">
                     <div class="term-name">Supreme Court</div>
                     <div class="score-section">
-                        <div class="score-value">-0.64 </div>
+                        <div class="score-value">-0.69 </div>
+                        <div class="score-label">Score</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class="card negative">
+                <a href="hakeem-jeffries.html">
+                    <div class="term-name">Hakeem Jeffries</div>
+                    <div class="score-section">
+                        <div class="score-value">-0.68 </div>
                         <div class="score-label">Score</div>
                     </div>
                 </a>
@@ -220,6 +220,6 @@
             </div></div>
 </div>
 
-<div class="timenote">Last updated 07:22AM on June 26, 2025</div>
+<div class="timenote">Last updated 07:20AM on June 27, 2025</div>
 </body>
 </html>
