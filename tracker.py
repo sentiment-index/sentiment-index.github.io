@@ -1,4 +1,5 @@
 import hashlib
+import itertools
 import os
 import re
 import json
@@ -192,7 +193,7 @@ def get_newsworthy_terms(term_list: List[str]) -> List[str]:
 
     post_string = " ----\n ".join([
         " " + replace_symbols_with_space(post.title.lower()) + " \n " + (replace_symbols_with_space(post.selftext.lower()) or "") + " "
-        for post in reddit.subreddit("all").hot(limit=1000)
+        for post in itertools.chain(reddit.subreddit("worldnews").hot(limit=700), reddit.subreddit("popculturechat").hot(limit=300), reddit.subreddit("science").hot(limit=100))
     ])
 
     sorted_term_list = sorted(term_list, key=lambda term: post_string.count(" " + term.lower() + " "), reverse=True)
