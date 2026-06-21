@@ -92,7 +92,6 @@ def ensure_term_dir(term: str):
     return term_dir
 
 def search_bluesky(keyword: str, limit: int) -> List[Tuple[str, float]]:
-    print("Searching bluesky...")
     response = requests.get(
         "https://api.bsky.app/xrpc/app.bsky.feed.searchPosts",
         {
@@ -103,12 +102,10 @@ def search_bluesky(keyword: str, limit: int) -> List[Tuple[str, float]]:
     )
     posts = response.json()["posts"]
     post_data = [(post["record"]["text"], parser.isoparse(post["record"]["createdAt"]).timestamp()) for post in posts]
-    print("...bluesky search done")
     return post_data
 
 
 def search_reddit(keyword: str, limit: int) -> List[Tuple[str, float]]:
-    print("Searching reddit...")
     posts = list(reddit.subreddit("all").search(keyword, limit=limit // 2, sort="hot"))
     comments = []
     if len(posts) == 0:
@@ -124,7 +121,6 @@ def search_reddit(keyword: str, limit: int) -> List[Tuple[str, float]]:
         comments = post.comments[0:min(len(post.comments), limit // 2)]
 
     combined_texts = [(post.title+"\n"+post.selftext, post.created_utc) for post in posts] + [(comment.body, comment.created_utc) for comment in comments]
-    print("...reddit search done")
     return combined_texts
 
 searchers: dict[Source, Callable[[str, int], list[tuple[str, float]]]] = {
@@ -214,26 +210,21 @@ def compute_smoothed_avg(raw_data: dict[str, WeightedPoint]) -> dict[str, float]
 def update_term(term: str, searchers: dict[Source, Callable[[str, int], list[tuple[str, float]]]]) -> dict[Source, RawData]:
     source_posts = {source: searcher(term, 100) for source, searcher in searchers.items()}
     raw_data = {source: load_raw_data(source, term) for source in searchers}
-    print("raw data sourced")
 
     for source, posts in source_posts.items():
         for post in posts:
-            print(f"analyzing post {post}")
             created_date = datetime.fromtimestamp(post[1], tz=ZoneInfo("UTC")).date()
             date_key = str(created_date)
             text = post[0]
             text_hash = stable_hash(text, post[1])
 
             if text_hash not in raw_data[source].post_texts:
-                print("getting score")
                 sentiment_score = analyze_post_sentiment(text, term)
                 raw_data[source].post_texts.append(text_hash)
                 if date_key not in raw_data[source].scores:
                     raw_data[source].scores[date_key] = WeightedPoint(0,0)
                 raw_data[source].scores[date_key].append(sentiment_score)
-                print("got score")
             else:
-                print("already analyzed")
                 # Bump it on the cache queue so it doesn't get removed
                 raw_data[source].post_texts.remove(text_hash)
                 raw_data[source].post_texts.append(text_hash)
