@@ -39,8 +39,8 @@ sentiment_pipeline = pipeline(
 )
 
 reddit = praw.Reddit(
-    client_id=os.getenv('REDDIT_CLIENT_ID') or my_secrets.reddit_client_id,
-    client_secret=os.getenv('REDDIT_CLIENT_SECRET') or my_secrets.reddit_client_secret,
+    client_id=os.getenv('REDDIT_CLIENT_ID'), # or my_secrets.reddit_client_id,
+    client_secret=os.getenv('REDDIT_CLIENT_SECRET'), # or my_secrets.reddit_client_secret,
     user_agent="crawler"
 )
 
