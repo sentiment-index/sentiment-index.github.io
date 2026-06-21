@@ -98,6 +98,7 @@ def ensure_term_dir(term: str):
     return term_dir
 
 def search_bluesky(keyword: str, limit: int) -> List[Tuple[str, float]]:
+    print(f"fetching bsky for {keyword}")
     response = requests.get(
         "https://api.bsky.app/xrpc/app.bsky.feed.searchPosts",
         {
@@ -112,6 +113,8 @@ def search_bluesky(keyword: str, limit: int) -> List[Tuple[str, float]]:
 
 
 def search_reddit(keyword: str, limit: int) -> List[Tuple[str, float]]:
+    print(f"fetching reddit for {keyword}")
+
     posts = list(reddit.subreddit("all").search(keyword, limit=limit // 2, sort="hot"))
     comments = []
     if len(posts) == 0:
@@ -225,6 +228,7 @@ def update_term(term: str, searchers: dict[Source, Callable[[str, int], list[tup
             text_hash = stable_hash(text, post[1])
 
             if text_hash not in raw_data[source].post_texts:
+                print("analyzing sentiment")
                 sentiment_score = analyze_post_sentiment(text, term)
                 raw_data[source].post_texts.append(text_hash)
                 if date_key not in raw_data[source].scores:
