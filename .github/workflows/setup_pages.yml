@@ -7,55 +7,95 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   setup-pages:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        persist-credentials: false  # we will manually set up credentials
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          path: source
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+      - name: Checkout sentiment data
+        uses: actions/checkout@v4
+        with:
+          ref: data
+          path: data
+          persist-credentials: false
 
-    - name: Cache pip dependencies
-      uses: actions/cache@v4
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('source/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
-    - name: Run setup_pages.py
-      env:
-        REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
-        REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
-      run: |
-        python refresh_site.py
+      - name: Install dependencies
+        run: |
+          pip install -r source/requirements.txt
 
-    - name: Remove old sentiment cache files
-      run: |
-        find sentiment-files -type f \( -name "*-scores-raw.json" -o -name "avg-scores.json" \) -delete
+      - name: Run refresh_site.py
+        working-directory: source
+        env:
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          SENTIMENT_BASE_DIR: ../data/sentiment-files
+          HTML_BASE_DIR: ../publish
+        run: |
+          python refresh_site.py
 
-    - name: Commit and push changes
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-        git add docs/ sentiment-files/
-        if git diff --cached --quiet; then
-          echo "No changes to commit."
-        else
-          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
-          git commit -m "Update generated pages: ${TIMESTAMP}"
-          git push
-        fi
+      - name: Ensure publish directory exists
+        run: mkdir -p publish
+
+      - name: Remove old sentiment cache files
+        run: |
+          find data/sentiment-files -type f \( -name "*-scores-raw.json" -o -name "avg-scores.json" \) -delete
+
+      - name: Commit updated sentiment data
+        run: |
+          cd data
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git remote set-url origin \
+            https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+
+          git add sentiment-files
+
+          if git diff --cached --quiet; then
+            echo "No data changes"
+          else
+            TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
+            git commit -m "Update sentiment data: ${TIMESTAMP}"
+            git push origin data
+          fi
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: publish
+
+  deploy:
+    needs: setup-pages
+
+    permissions:
+      pages: write
+      id-token: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

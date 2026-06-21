@@ -19,7 +19,13 @@ from transformers import AutoTokenizer, pipeline
 
 # import my_secrets
 
-SENTIMENT_BASE_DIR = "./sentiment-files"
+
+SENTIMENT_BASE_DIR = os.environ.get(
+    "SENTIMENT_BASE_DIR",
+    "sentiment-files"
+)
+
+
 DAYS = 365
 
 model_id = "yangheng/deberta-v3-base-absa-v1.1"

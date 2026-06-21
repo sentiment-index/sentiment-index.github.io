@@ -5,7 +5,10 @@ from zoneinfo import ZoneInfo
 
 from tracker import get_term_list, load_avg_sentiment_scores, get_newsworthy_terms, Source
 
-HTML_BASE_DIR = "docs"
+HTML_BASE_DIR = os.environ.get(
+    "HTML_BASE_DIR",
+    "docs"
+)
 
 def term_to_url(term: str) -> str:
     return  term.replace(" ", "-").lower()+".html"
