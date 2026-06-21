@@ -12,3 +12,18 @@
  - [x] Switch data storage to JSON
  - [x] Add comments to scores
  - [x] Store post hashes instead of raw posts
+
+
+~~~ VERSION 2 ~~~
+
+ - [ ] Make 'Internet Sentiment Index'
+    - [ ] Adds bluesky
+    - [ ] Add time window to bluesky
+    - [ ] Find other source to post
+    - [ ] Add bluesky bot integration
+ - [ ] Use new ASBA model
+ - [ ] New sentiment file format
+    - [ ] Remove existing sentiment files
+ - [ ] Update requirements
+
+ - [ ] Add 100 new items

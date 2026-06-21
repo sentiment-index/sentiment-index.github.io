@@ -452,3 +452,27 @@ th img {
     font-size: 26pt;
   }
 }
+
+.range-selector {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.range-selector button {
+    cursor: pointer;
+}
+
+.source-charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.source-chart {
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+}

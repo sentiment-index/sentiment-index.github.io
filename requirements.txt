@@ -1,4 +1,6 @@
-accelerate
 praw
+requests
 torch
 transformers
+optimum[onnxruntime]
+sentencepiece

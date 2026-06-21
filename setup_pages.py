@@ -3,12 +3,32 @@ from datetime import datetime, timedelta
 from typing import List, Dict, Union
 from zoneinfo import ZoneInfo
 
-from tracker import get_term_list, load_avg_sentiment_scores, get_newsworthy_terms
+from tracker import get_term_list, load_avg_sentiment_scores, get_newsworthy_terms, Source
 
 HTML_BASE_DIR = "docs"
 
 def term_to_url(term: str) -> str:
     return  term.replace(" ", "-").lower()+".html"
+
+def combined_scores(avg_data: dict) -> dict[str, float]:
+    reddit = avg_data.get(Source.REDDIT, {})
+    bluesky = avg_data.get(Source.BLUESKY, {})
+
+    all_dates = sorted(set(reddit.keys()) | set(bluesky.keys()))
+
+    combined = {}
+    for d in all_dates:
+        values = []
+
+        if d in reddit:
+            values.append(reddit[d])
+
+        if d in bluesky:
+            values.append(bluesky[d])
+
+        combined[d] = sum(values) / len(values) if values else 0.0
+
+    return combined
 
 def generate_about():
 
@@ -89,7 +109,9 @@ def generate_index():
     term_list = get_term_list()
 
     for term in term_list:
-        avg_data = load_avg_sentiment_scores(term)
+        source_data = load_avg_sentiment_scores(term)
+        avg_data = combined_scores(source_data)
+
         today = datetime.now(ZoneInfo("UTC")).date()
         yesterday = today - timedelta(days=1)
         n = 0
@@ -211,10 +233,29 @@ def generate_index():
 
 
 def generate_term_page(term: str):
-    avg_data = load_avg_sentiment_scores(term)
+    source_data = load_avg_sentiment_scores(term)
+
+    reddit_data = source_data.get(Source.REDDIT, {})
+    bluesky_data = source_data.get(Source.BLUESKY, {})
+
+    avg_data = combined_scores(source_data)
 
     sorted_dates = sorted(avg_data.keys())
-    scores = [max(-1, min(1, avg_data[date])) for date in sorted_dates]
+
+    scores = [
+        max(-1, min(1, avg_data[d]))
+        for d in sorted_dates
+    ]
+
+    reddit_scores = [
+        max(-1, min(1, reddit_data.get(d, 0)))
+        for d in sorted_dates
+    ]
+
+    bluesky_scores = [
+        max(-1, min(1, bluesky_data.get(d, 0)))
+        for d in sorted_dates
+    ]
 
     today = datetime.now(ZoneInfo("UTC")).date()
     yesterday = today - timedelta(days=1)
@@ -264,129 +305,218 @@ def generate_term_page(term: str):
     change_display = f"{change_arrow} {abs(change):.3f}"
 
     html = f"""
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Sentiment for {term}</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="icon" type="image/x-icon" href="site-assets/favicon.svg">
-</head>
-<body>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{term} - Internet Sentiment Index</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <link rel="icon" type="image/x-icon" href="site-assets/favicon.svg">
+    </head>
+    <body>
 
-<div id="search-overlay" class="search-overlay" style="display: none;">
-      <div class="search-box">
-          <span><button class="close-search">X</button><input type="text" id="search-input" placeholder="Search for a term..." /></span>
-          <div id="search-results"></div>
+    <div id="search-overlay" class="search-overlay" style="display: none;">
+          <div class="search-box">
+              <span><button class="close-search">X</button><input type="text" id="search-input" placeholder="Search for a term..." /></span>
+              <div id="search-results"></div>
+          </div>
+    </div>
+
+    <header class="site-header">
+      <div class="header-content">
+        <div class="logo">
+          <img src="site-assets/logo.svg" alt="Logo">
+        </div>
+        <nav class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="term-list.html">List</a>
+          <a href="about.html">About</a>
+
+          <button class="search-button"><img src="site-assets/search.svg" alt="Search" class="search-icon"></button>
+        </nav>
       </div>
-</div>
+    </header>
 
-<header class="site-header">
-  <div class="header-content">
-    <div class="logo">
-      <img src="site-assets/logo.svg" alt="Logo">
+    <div class="wrapper">
+        <script>
+        const TERMS = {terms_json};
+        </script>
+        <script src="site-assets/search.js"></script>
+
+        <h1>Online Sentiment for “{term}” is <span class="{descriptor_class}">{descriptor}</span></h1>
+
+        <div class="score-change">
+            <div class="score-block">
+                <div class="label">Score</div>
+                <div class="score {descriptor_class}">{score_display}</div>
+            </div>
+            <div class="change-block">
+                <div class="label">Change</div>
+                <div class="change {change_class}">{change_display}</div>
+            </div>
+        </div>
+
+        <div class="range-selector">
+            <button onclick="updateRange(30)">30D</button>
+            <button onclick="updateRange(90)">90D</button>
+            <button onclick="updateRange(365)">365D</button>
+        </div>
+
+        <canvas id="sentimentChart" width="800" height="400"></canvas>
+
+        <div class="source-charts">
+
+            <div class="source-chart">
+                <h2>Reddit</h2>
+                <canvas id="redditChart"></canvas>
+            </div>
+
+            <div class="source-chart">
+                <h2>Bluesky</h2>
+                <canvas id="blueskyChart"></canvas>
+            </div>
+
+        </div>
     </div>
-    <nav class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="term-list.html">List</a>
-      <a href="about.html">About</a>
 
-      <button class="search-button"><img src="site-assets/search.svg" alt="Search" class="search-icon"></button>
-    </nav>
-  </div>
-</header>
-
-
-<div class="wrapper">
     <script>
-    const TERMS = {terms_json};
-    </script>
-    <script src="site-assets/search.js"></script>
+        const allLabels = {sorted_dates};
+        const allScores = {scores};
 
-    <h1>Sentiment for “{term}” is <span class="{descriptor_class}">{descriptor}</span></h1>
+        const redditScores = {reddit_scores};
+        const blueskyScores = {bluesky_scores};
 
-    <div class="score-change">
-        <div class="score-block">
-            <div class="label">Score</div>
-            <div class="score {descriptor_class}">{score_display}</div>
-        </div>
-        <div class="change-block">
-            <div class="label">Change</div>
-            <div class="change {change_class}">{change_display}</div>
-        </div>
-    </div>
+        const ctx = document.getElementById('sentimentChart').getContext('2d');
 
-    <canvas id="sentimentChart" width="800" height="400"></canvas>
-</div>
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(144, 238, 144, 0.3)');
+        gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0)');
+        gradient.addColorStop(1, 'rgba(255, 182, 193, 0.2)');
 
-<script>
-    const ctx = document.getElementById('sentimentChart').getContext('2d');
-
-    const allLabels = {sorted_dates};
-    const allScores = {scores};
-
-    const recentLabels = allLabels.slice(-30);
-    const recentScores = allScores.slice(-30);
-
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, 'rgba(144, 238, 144, 0.3)');
-    gradient.addColorStop(0.5, 'rgba(255, 255, 255, 0)');
-    gradient.addColorStop(1, 'rgba(255, 182, 193, 0.2)');
-
-    const sentimentChart = new Chart(ctx, {{
-        type: 'line',
-        data: {{
-            labels: recentLabels,
-            datasets: [{{
-                label: 'Sentiment Score',
-                data: recentScores,
-                fill: true,
-                borderColor: '#183660',
-                backgroundColor: gradient,
-                tension: 0.3,
-                pointRadius: 2,
-            }}]
-        }},
-        options: {{
-            scales: {{
-                y: {{
-                    min: -1,
-                    max: 1,
-                    grid: {{
-                        drawBorder: true,
-                        color: function(context) {{
-                            if (context.tick.value === 0) {{
-                                return '#000';
+        let sentimentChart = new Chart(ctx, {{
+            type: 'line',
+            data: {{
+                labels: allLabels.slice(-30),
+                datasets: [{{
+                    label: 'Internet Sentiment Index',
+                    data: allScores.slice(-30),
+                    fill: true,
+                    borderColor: '#183660',
+                    backgroundColor: gradient,
+                    tension: 0.3,
+                    pointRadius: 2,
+                }}]
+            }},
+            options: {{
+                scales: {{
+                    y: {{
+                        min: -1,
+                        max: 1,
+                        grid: {{
+                            drawBorder: true,
+                            color: function(context) {{
+                                if (context.tick.value === 0) {{
+                                    return '#000';
+                                }}
+                                return '#e0e0e0';
+                            }},
+                            lineWidth: function(context) {{
+                                return context.tick.value === 0 ? 2 : 1;
                             }}
-                            return '#e0e0e0';
-                        }},
-                        lineWidth: function(context) {{
-                            return context.tick.value === 0 ? 2 : 1;
+                        }}
+                    }},
+                    x: {{
+                        ticks: {{
+                            autoSkip: true,
+                            maxTicksLimit: 10
                         }}
                     }}
                 }},
-                x: {{
-                    ticks: {{
-                        autoSkip: true,
-                        maxTicksLimit: 10
+                plugins: {{
+                    legend: {{
+                        display: false
                     }}
                 }}
-            }},
-            plugins: {{
-                legend: {{
-                    display: false
+            }}
+        }});
+
+        function updateRange(days) {{
+            sentimentChart.data.labels = allLabels.slice(-days);
+            sentimentChart.data.datasets[0].data = allScores.slice(-days);
+            sentimentChart.update();
+        }}
+
+        new Chart(
+            document.getElementById('redditChart').getContext('2d'),
+            {{
+                type: 'line',
+                data: {{
+                    labels: allLabels,
+                    datasets: [{{
+                        label: 'Reddit',
+                        data: redditScores,
+                        borderColor: '#ff4500',
+                        tension: 0.3,
+                        pointRadius: 0,
+                        fill: false
+                    }}]
+                }},
+                options: {{
+                    responsive: true,
+                    plugins: {{
+                        legend: {{
+                            display: false
+                        }}
+                    }},
+                    scales: {{
+                        y: {{
+                            min: -1,
+                            max: 1
+                        }}
+                    }}
                 }}
             }}
-        }}
-    }});
-</script>
+        );
 
-<div class="timenote">Last updated {datetime.now().strftime("%I:%M%p on %B %d, %Y")}</div>
+        new Chart(
+            document.getElementById('blueskyChart').getContext('2d'),
+            {{
+                type: 'line',
+                data: {{
+                    labels: allLabels,
+                    datasets: [{{
+                        label: 'Bluesky',
+                        data: blueskyScores,
+                        borderColor: '#1185fe',
+                        tension: 0.3,
+                        pointRadius: 0,
+                        fill: false
+                    }}]
+                }},
+                options: {{
+                    responsive: true,
+                    plugins: {{
+                        legend: {{
+                            display: false
+                        }}
+                    }},
+                    scales: {{
+                        y: {{
+                            min: -1,
+                            max: 1
+                        }}
+                    }}
+                }}
+            }}
+        );
+    </script>
 
-</body>
-</html>
-"""
+    <div class="timenote">Last updated {datetime.now().strftime("%I:%M%p on %B %d, %Y")}</div>
+
+    </body>
+    </html>
+    """
 
     output_path = os.path.join(HTML_BASE_DIR, term_to_url(term))
     with open(output_path, "w", encoding="utf-8") as f:
