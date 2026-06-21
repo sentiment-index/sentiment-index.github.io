@@ -54,8 +54,17 @@ jobs:
         run: |
           python refresh_site.py
 
-      - name: Ensure publish directory exists
-        run: mkdir -p publish
+      - name: Assemble publish directory
+        run: |
+          mkdir -p publish
+
+          cp -r source/docs/* publish/
+
+          cp -r source/style.css publish/
+          cp -r source/site-assets publish/
+          
+          echo "=== PUBLISH tree ==="
+          ls -R publish
 
       - name: Remove old sentiment cache files
         run: |
