@@ -16,7 +16,7 @@ from optimum.onnxruntime import ORTModelForSequenceClassification
 from transformers import AutoTokenizer, pipeline
 
 
-import my_secrets
+# import my_secrets
 
 SENTIMENT_BASE_DIR = "./sentiment-files"
 DAYS = 365
