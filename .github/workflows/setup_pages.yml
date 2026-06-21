@@ -66,7 +66,9 @@ jobs:
 
       - name: Remove old sentiment cache files
         run: |
-          find data/sentiment-files -type f \( -name "*-scores-raw.json" -o -name "avg-scores.json" \) -delete
+          find data/sentiment-files -type f \
+            \( -name "scores-raw.json" -o -name "scores-avg.json" \) \
+            -delete
 
       - name: Commit updated sentiment data
         run: |
