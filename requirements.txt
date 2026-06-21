@@ -1,5 +1,6 @@
 praw
 requests
+python-dateutil
 torch
 transformers
 optimum[onnxruntime]

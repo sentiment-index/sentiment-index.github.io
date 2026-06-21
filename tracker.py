@@ -8,6 +8,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta, date
 from typing import List, Tuple, Callable
 from zoneinfo import ZoneInfo
+from dateutil import parser
 
 import praw
 import requests
@@ -100,7 +101,7 @@ def search_bluesky(keyword: str, limit: int) -> List[Tuple[str, float]]:
         }
     )
     posts = response.json()["posts"]
-    post_data = [(post["record"]["text"], datetime.fromisoformat(post["record"]["createdAt"].replace("Z", "+00:00")).timestamp()) for post in posts]
+    post_data = [(post["record"]["text"], parser.isoparse(post["record"]["createdAt"]).timestamp()) for post in posts]
     return post_data
 
 
@@ -139,7 +140,7 @@ def analyze_post_sentiment(text: str, aspect: str) -> float:
 def serialize_raw_data(source: Source, term: str, data: RawData):
     term_dir = ensure_term_dir(term)
     with open(os.path.join(term_dir, source.value+"-scores-raw.json"), "w") as f:
-        data.post_texts = data.post_texts[-500:]
+        data.post_texts = data.post_texts # [-500:] # limit cache size
         json.dump(data.to_dict(), f, indent=2)
 
 def load_raw_data(source: Source, term: str) -> RawData:
@@ -213,7 +214,7 @@ def update_term(term: str, searchers: dict[Source, Callable[[str, int], list[tup
 
     for source, posts in source_posts.items():
         for post in posts:
-            created_date = datetime.fromtimestamp(post[1]).date()
+            created_date = datetime.fromtimestamp(post[1], tz=ZoneInfo("UTC")).date()
             date_key = str(created_date)
             text = post[0]
             text_hash = stable_hash(text, post[1])
