@@ -25,6 +25,8 @@ SENTIMENT_BASE_DIR = os.environ.get(
     "sentiment-files"
 )
 
+os.makedirs(SENTIMENT_BASE_DIR, exist_ok=True)
+
 
 DAYS = 365
 

@@ -9,6 +9,7 @@ HTML_BASE_DIR = os.environ.get(
     "HTML_BASE_DIR",
     "docs"
 )
+os.makedirs(HTML_BASE_DIR, exist_ok=True)
 
 def term_to_url(term: str) -> str:
     return  term.replace(" ", "-").lower()+".html"
