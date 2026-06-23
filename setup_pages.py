@@ -361,13 +361,20 @@ def generate_term_page(term: str):
             </div>
         </div>
 
-        <div class="range-selector">
-            <button onclick="updateRange(30)">30D</button>
-            <button onclick="updateRange(90)">90D</button>
-            <button onclick="updateRange(365)">365D</button>
+        <div class="range-selector-wrapper">
+            <div class="range-selector">
+                <button onclick="updateRange(30)">30D</button>
+                <button onclick="updateRange(90)">90D</button>
+                <button onclick="updateRange(365)">365D</button>
+            </div>
         </div>
 
-        <canvas id="sentimentChart" width="800" height="400"></canvas>
+        <div class="main-chart">
+
+            <canvas id="sentimentChart" width="800" height="400"></canvas>
+        
+        </div>
+
 
         <div class="source-charts">
 
@@ -446,6 +453,10 @@ def generate_term_page(term: str):
         }});
 
         function updateRange(days) {{
+            document.querySelectorAll('.range-selector button').forEach(btn => {{
+                btn.classList.remove('active');
+            }});
+            event.target.classList.add('active');
             sentimentChart.data.labels = allLabels.slice(-days);
             sentimentChart.data.datasets[0].data = allScores.slice(-days);
             sentimentChart.update();
@@ -477,6 +488,12 @@ def generate_term_page(term: str):
                         y: {{
                             min: -1,
                             max: 1
+                        }},
+                        x: {{
+                            ticks: {{
+                                autoSkip: true,
+                                maxTicksLimit: 10
+                            }}
                         }}
                     }}
                 }}
@@ -509,6 +526,12 @@ def generate_term_page(term: str):
                         y: {{
                             min: -1,
                             max: 1
+                        }},
+                        x: {{
+                            ticks: {{
+                                autoSkip: true,
+                                maxTicksLimit: 5
+                            }}
                         }}
                     }}
                 }}

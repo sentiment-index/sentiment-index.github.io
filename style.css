@@ -6,16 +6,17 @@
 body {
   font-family: Arial, sans-serif;
   margin: 0;
-  background: #fffefa;
+  background: #F5F0F6;
 }
 
 .wrapper {
   max-width: min(1200px, 100%);
   margin: 40px auto;
-  background: #faf7eb;
+  background: #ccb3d1;
   border-radius: 12px;
   /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); */
   padding: 30px;
+    outline: 6px solid #183660;
 }
 
 h1 {
@@ -45,10 +46,9 @@ h2 {
 
 .card {
   flex: 0 0 300px;
-  background: #fffefa;
+  background: #F5F0F6;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   word-wrap: break-word;
   display: flex;
@@ -57,10 +57,10 @@ h2 {
   justify-content: space-between;
   min-height: 120px;
   max-height: 120px;
+    outline: 6px solid #183660 ;
 }
 
 .card:hover {
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
   transform: translateY(-4px);
   transition: all 0.2s ease;
 }
@@ -91,15 +91,15 @@ h2 {
 }
 
 .positive {
-  color: green;
+  color: #45B048;
 }
 
 .neutral {
-  color: #555555;
+  color: #444;
 }
 
 .negative {
-  color: red;
+  color: #ED254E;
 }
 
 a {
@@ -122,9 +122,10 @@ a {
 }
 .site-header {
   width: 100%;
-  background: #faf7eb;
+  background: #ccb3d1;
   /*box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);*/
   padding: 10px 0;
+    outline: 6px solid #183660;
 }
 
 .header-content {
@@ -151,7 +152,7 @@ a {
 }
 
 .nav-links a {
-  font-size: 16px;
+  font-size: 20px;
   color: #183660;
   text-decoration: none;
   display: flex;
@@ -184,7 +185,7 @@ a {
 
 .label {
     font-size: 1.2rem;
-    color: #555;
+    color: #444;
     margin-bottom: 0.5rem;
 }
 
@@ -209,7 +210,7 @@ a {
     padding: 10px;
     font-size: 16px;
     border-radius: 20px;
-    outline: none;
+    outline: 3px solid #183660;
 }
 
 #search-results {
@@ -254,24 +255,27 @@ a {
   align-items: center;
   margin-left: 20%;
   width: 60%;
-  background: #faf7eb;
+  background: #F5F0F6;
   margin-top: 100px;
   max-height: 100%;
   border-radius: 20px;
   padding: 20px;
+    outline: 6px solid #183660;
 }
 
 .close-search {
   position: absolute;
   top: 30px;
   right: 30px;
-  background: #faf7eb;
+  background: #F5F0F6;
   border: none;
   border-radius: 60px;
   width: 60px;
   height: 60px;
   font-size: 1.5rem;
   cursor: pointer;
+  outline: 6px solid #183660;
+
 }
 
 .search-button {
@@ -294,7 +298,7 @@ a {
     align-items: center;
     max-width: min(1200px, 100%);
     margin: 40px auto;
-    background: #faf7eb;
+    background: #F5F0F6;
     border-radius: 12px;
     padding: 30px;
 }
@@ -303,11 +307,11 @@ a {
     border-collapse: separate;
     border-spacing: 0 15px;
     width: 80%;
-    background-color: #faf7eb;
+    background-color: #F5F0F6;
 }
 
 #termsTable thead th {
-    background-color: #d9c882;
+    background-color: #ccb3d1;
     color: black;
     padding: 15px;
     text-align: left;
@@ -321,12 +325,12 @@ a {
 }
 
 #termsTable tbody tr:hover td {
-    background-color: #d9c882;
+    background-color: #ccb3d1;
 }
 
 #termsTable tbody td a {
     text-decoration: none;
-    color: #333;
+    color: #444;
 }
 
 #termsTable tbody td a:hover {
@@ -453,15 +457,42 @@ th img {
   }
 }
 
-.range-selector {
+.range-selector-wrapper {
     display: flex;
-    gap: 8px;
     justify-content: center;
     margin: 20px 0;
 }
 
+.range-selector {
+    display: inline-flex;
+    padding: 4px;
+    background: #F5F0F6;
+    border-radius: 9999px;
+    gap: 4px;
+    outline: 6px solid #183660;
+}
+
 .range-selector button {
-    cursor: pointer;
+border: none;
+background: transparent;
+padding: 8px 18px;
+border-radius: 9999px;
+cursor: pointer;
+font-size: 14px;
+color: #444;
+transition: all 0.2s ease;
+    font-family: "Arial Black", Arial, sans-serif;
+}
+
+.range-selector button.active {
+background: #183660;
+    color: #F5F0F6;
+}
+
+.range-selector button:hover:not(.active) {
+
+background: rgba(255,255,255,0.4);
+
 }
 
 .source-charts {
@@ -472,6 +503,16 @@ th img {
 }
 
 .source-chart {
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.source-chart > h2 {
+    margin-top: 0px;
+}
+
+.main-chart {
     background: white;
     padding: 16px;
     border-radius: 12px;

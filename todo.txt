@@ -17,13 +17,18 @@
 ~~~ VERSION 2 ~~~
 
  - [ ] Make 'Internet Sentiment Index'
-    - [ ] Adds bluesky
-    - [ ] Add time window to bluesky
+    - [x] Adds bluesky
+    - [x] Add time window to bluesky
     - [ ] Find other source to post
     - [ ] Add bluesky bot integration
- - [ ] Use new ASBA model
- - [ ] New sentiment file format
-    - [ ] Remove existing sentiment files
- - [ ] Update requirements
-
- - [ ] Add 100 new items
+ - [ ] Update frontend
+    - [ ] Update table
+    - [ ] Replace arrows with carats
+    - [ ] Rewrite 'about'
+    - [ ] Redo logo
+ - [ ] Debug favicon
+ - [x] Use new ASBA model
+ - [x] New sentiment file format
+    - [x] Remove existing sentiment files
+ - [x] Update requirements
+ - [x] Add 100 new items
