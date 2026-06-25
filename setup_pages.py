@@ -76,23 +76,27 @@ def generate_about():
 
 <section class="about-section">
   <h2>The Idea</h2>
-  <p>Every day, millions of conversations happen on the internet. We built this site to track how people feel about key topics over time. Why do we only search Reddit? Its API is the cheapest.</p>
+  <p>Every day, millions of conversations happen across the internet. We built this site to track how people feel about key topics over time by analyzing discussions on Reddit and Bluesky. Why those two? Their APIs were free.</p>
 </section>
 
 <section class="about-section">
   <h2>The Methodology</h2>
-  <p>We start with a curated list of 100 terms that we want to track. Every day at midnight MST, we search Reddit for new posts mentioning these terms. Each post is semantically analyzed and assigned a sentiment score from <strong>1 (very negative)</strong> to <strong>5 (very positive)</strong> based on how people are talking about it.</p>
-  <p>For each term, we average the scores across all the posts from that day. We scale that to create our scores, which go from -1 for highly negative sentiment to 1 for positive sentiment.</p>
+  <p>We start with a curated list of 100 terms that we want to track. Every day, around midnight MST, we search our platforms for new posts mentioning these terms. Each post is analyzed using an aspect-based sentiment model, which evaluates how the author feels specifically about the tracked term rather than the overall tone of the post.</p>
+
+  <p>For each term, we calculate an average sentiment score for Reddit and Bluesky posts from that day. These platform-level scores are then combined using a weighted average based on the number of posts collected from each platform, ensuring that sources with more discussion contribute proportionally to the final score.</p>
+
+  <p>The resulting sentiment values are scaled to create scores ranging from <strong>-1 (very negative)</strong> to <strong>1 (very positive)</strong>.</p>
 </section>
 
 <section class="about-section">
   <h2>Notes</h2>
   <ul>
-    <li>Sentiment scores are averaged across posts mentioning a term, not weighted by upvotes or engagement.</li>
-    <li>We use a plaintext search, so we don't look at related terms, only the term itself.</li>
-    <li>Posts are analyzed using semantic language models, but sentiment analysis is inherently subjective and imperfect.</li>
+    <li>Sentiment scores are weighted by the number of posts collected from Reddit and Bluesky, but not by likes, upvotes, reposts, or other engagement metrics.</li>
+    <li>We use a plaintext search, so we do not analyze related terms, synonyms, or implied references—only posts containing the tracked term itself.</li>
+    <li>The scoring model we're using performs well, but language is nuanced and automated sentiment analysis remains inherently imperfect.</li>
   </ul>
 </section>
+
 
 </div>
 
@@ -199,7 +203,7 @@ def generate_index():
 
             arrow = ""
             if is_change:
-                arrow = "↑" if score > 0 else "↓"
+                arrow = "<img alt='Up chevron' class='icon-char' src='site-assets/up-chevron.svg'>" if score > 0 else "<img alt='Down chevron' class='icon-char' src='site-assets/down-chevron.svg'>"
 
             label = "Change" if is_change else "Score"
 
@@ -298,10 +302,10 @@ def generate_term_page(term: str):
 
     # Formatting change arrow
     if change >= 0:
-        change_arrow = "↑"
+        change_arrow = "<img alt='Up chevron' class='icon-char' src='site-assets/up-chevron.svg'>"
         change_class = "positive"
     else:
-        change_arrow = "↓"
+        change_arrow = "<img alt='Down chevron' class='icon-char' src='site-assets/down-chevron.svg'>"
         change_class = "negative"
 
     # Make scores show nicely rounded
@@ -452,26 +456,16 @@ def generate_term_page(term: str):
             }}
         }});
 
-        function updateRange(days) {{
-            document.querySelectorAll('.range-selector button').forEach(btn => {{
-                btn.classList.remove('active');
-            }});
-            event.target.classList.add('active');
-            sentimentChart.data.labels = allLabels.slice(-days);
-            sentimentChart.data.datasets[0].data = allScores.slice(-days);
-            sentimentChart.update();
-        }}
-
-        new Chart(
+        let redditChart = new Chart(
             document.getElementById('redditChart').getContext('2d'),
             {{
                 type: 'line',
                 data: {{
-                    labels: allLabels,
+                    labels: allLabels.slice(-30),
                     datasets: [{{
                         label: 'Reddit',
-                        data: redditScores,
-                        borderColor: '#ff4500',
+                        data: redditScores.slice(-30),
+                        borderColor: '#ff5900',
                         tension: 0.3,
                         pointRadius: 0,
                         fill: false
@@ -492,7 +486,7 @@ def generate_term_page(term: str):
                         x: {{
                             ticks: {{
                                 autoSkip: true,
-                                maxTicksLimit: 10
+                                maxTicksLimit: 5
                             }}
                         }}
                     }}
@@ -500,15 +494,15 @@ def generate_term_page(term: str):
             }}
         );
 
-        new Chart(
+        let blueskyChart = new Chart(
             document.getElementById('blueskyChart').getContext('2d'),
             {{
                 type: 'line',
                 data: {{
-                    labels: allLabels,
+                    labels: allLabels.slice(-30),
                     datasets: [{{
                         label: 'Bluesky',
-                        data: blueskyScores,
+                        data: blueskyScores.slice(-30),
                         borderColor: '#1185fe',
                         tension: 0.3,
                         pointRadius: 0,
@@ -537,6 +531,27 @@ def generate_term_page(term: str):
                 }}
             }}
         );
+        
+        function updateRange(days) {{
+            document.querySelectorAll('.range-selector button').forEach(btn => {{
+                btn.classList.remove('active');
+            }});
+            event.target.classList.add('active');
+        
+            const labels = allLabels.slice(-days);
+        
+            sentimentChart.data.labels = labels;
+            sentimentChart.data.datasets[0].data = allScores.slice(-days);
+            sentimentChart.update();
+        
+            redditChart.data.labels = labels;
+            redditChart.data.datasets[0].data = redditScores.slice(-days);
+            redditChart.update();
+        
+            blueskyChart.data.labels = labels;
+            blueskyChart.data.datasets[0].data = blueskyScores.slice(-days);
+            blueskyChart.update();
+        }}
     </script>
 
     <div class="timenote">Last updated {datetime.now().strftime("%I:%M%p on %B %d, %Y")}</div>
@@ -643,7 +658,7 @@ function sortTable(columnIndex, isNumeric = false) {{
         change_val = entry['change']
 
         today_score = f"{today_score_val:.3f}"
-        arrow = "↑" if change_val >= 0 else "↓"
+        arrow = "<img alt='Up chevron' class='icon-char' src='site-assets/up-chevron.svg'>" if change_val > 0 else "<img alt='Down chevron' class='icon-char' src='site-assets/down-chevron.svg'>"
         change = f"{change_val:+.3f}{arrow}"
 
         score_class = "positive" if today_score_val >= 0 else "negative"

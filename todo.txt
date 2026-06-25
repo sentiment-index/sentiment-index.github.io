@@ -22,10 +22,13 @@
     - [ ] Find other source to post
     - [ ] Add bluesky bot integration
  - [ ] Update frontend
-    - [ ] Update table
-    - [ ] Replace arrows with carats
-    - [ ] Rewrite 'about'
-    - [ ] Redo logo
+    - [x] Update table
+    - [x] Replace arrows with carats
+    - [x] Rewrite 'about'
+    - [ ] Test mobile
+    - [x] Fix centering on search
+    - [x] Fix time windows on sub graphs
+    - [x] Redo logo
  - [ ] Debug favicon
  - [x] Use new ASBA model
  - [x] New sentiment file format
