@@ -25,7 +25,9 @@
     - [x] Update table
     - [x] Replace arrows with carats
     - [x] Rewrite 'about'
-    - [ ] Test mobile
+    - [x] Test mobile
+    - [x] Center text in table rows
+    - [ ] 30d should start highlighted
     - [x] Fix centering on search
     - [x] Fix time windows on sub graphs
     - [x] Redo logo

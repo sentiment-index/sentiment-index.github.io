@@ -343,12 +343,14 @@ a {
     color: var(--border-color);
     font-family: "Arial Black", "Arial", sans-serif;
     font-style: italic;
+    text-align: left;
 }
 
 #termsTable tbody td {
     background: var(--bg-color);
     padding: 15px;
     font-size: 1.1em;
+    text-align: left;
 }
 
 
@@ -376,6 +378,8 @@ a {
     text-decoration: underline;
 }
 
+
+
 th img {
   min-width: 40px;
   max-height: 15px;
@@ -385,116 +389,13 @@ th img {
   max-height: 24pt;
   min-width: 30pt;
 }
-
 .row-header {
-  display: flex;
-  max-width: 80%;
+    display: flex;
+    /* width: 100%;*/
+    /*align-items: center;*/
+    justify-content: flex-start;
 }
 
-
-@media (max-width: 1068px), (pointer:none), (pointer:coarse) {
-  h1, h2, .term-name, .nav-links a {
-    /* font-family: Arial, sans-serif;*/
-    font-style: italic;
-    font-weight: normal;
-
-  }
-  .wrapper {
-    margin: 20px;
-    padding: 20px;
-  }
-  .table-wrapper {
-    margin: 20px;
-    padding: 20px;
-  }
-
-  h1 {
-    font-size: 42pt;
-  }
-
-  h2 {
-    font-size: 28pt;
-  }
-
-  .row-icon {
-    max-height: 30pt;
-  }
-
-  .topbox h2 {
-    font-size: 24pt;
-  }
-
-  body {
-    font-size: 20px;
-  }
-
-  .card {
-    flex: 0 0 90%;
-    padding: 30px;
-  }
-
-  .score-value {
-    font-size: 32pt;
-  }
-
-  .score-change {
-    font-size: 24pt;
-  }
-
-  .score-label {
-    font-size: 18pt;
-  }
-
-  .term-name {
-    font-size: 42pt;
-  }
-
-  .nav-links a {
-    font-size: 30pt;
-  }
-
-  .search-icon {
-    height: 36px;
-    width: 36px;
-  }
-
-  .row {
-    gap: 15px;
-  }
-
-  #search-input {
-    font-size: 22pt;
-  }
-
-  .search-result-link {
-    font-size: 26pt;
-  }
-
-  table {
-    min-width: 95%;
-    font-size: 24pt;
-  }
-
-  .timenote {
-    font-size: 20pt;
-  }
-
-  #sentimentChart {
-    height: 1600px;
-  }
-
-  .score {
-    font-size: 48pt;
-  }
-
-  .change {
-    font-size: 48pt;
-  }
-
-  .label {
-    font-size: 26pt;
-  }
-}
 
 .range-selector-wrapper {
     display: flex;
@@ -541,12 +442,6 @@ background: rgba(255,255,255,0.4);
     margin-top: 40px;
 }
 
-.source-chart {
-    background: white;
-    padding: 16px;
-    border-radius: 12px;
-}
-
 .source-chart > h2 {
     margin-top: 0px;
 }
@@ -555,6 +450,22 @@ background: rgba(255,255,255,0.4);
     background: white;
     padding: 16px;
     border-radius: 12px;
+    height: 500px;
+}
+
+.source-chart {
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    height: 350px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.source-chart canvas {
+    flex: 1;
+    min-height: 0;
 }
 
 .about-section {
@@ -573,4 +484,145 @@ background: rgba(255,255,255,0.4);
 .about-section ul {
     margin: 0;
     padding-left: 24px;
+}
+
+
+@media (max-width: 1068px), (pointer:none), (pointer:coarse) {
+  h1, h2, .term-name, .nav-links a {
+    /* font-family: Arial, sans-serif;*/
+    font-style: italic;
+    font-weight: normal;
+
+  }
+  .logo img {
+    height: 90px;
+    max-width: none;
+  }
+
+
+  .wrapper {
+        margin: 50px 20px 20px;
+  }
+  .table-wrapper {
+    margin: 20px;
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 42pt;
+  }
+
+  h2 {
+    font-size: 28pt;
+  }
+
+  .row-icon {
+    max-height: 30pt;
+  }
+
+  .topbox h2 {
+    font-size: 24pt;
+  }
+
+  body {
+    font-size: 20px;
+  }
+
+  .card {
+    flex: 0 0 90%;
+    padding: 30px;
+  }
+
+  .score-value {
+    font-size: 32pt;
+  }
+
+  .score-change {
+    font-size: 24pt;
+  }
+
+
+
+  .score-label {
+    font-size: 18pt;
+  }
+
+  .term-name {
+    font-size: 42pt;
+  }
+
+  .nav-links a {
+    font-size: 30pt;
+  }
+
+  .search-icon {
+    height: 36px;
+    width: 36px;
+  }
+
+  .row {
+    gap: 30px;
+  }
+
+  #search-input {
+    font-size: 22pt;
+  }
+
+  .search-result-link {
+    font-size: 26pt;
+  }
+
+  table {
+    min-width: 95%;
+    font-size: 24pt;
+  }
+
+  .timenote {
+    font-size: 20pt;
+  }
+
+
+
+
+    .range-selector {
+        padding: 8px;
+        gap: 8px;
+        border-radius: 9999px;
+    }
+
+    .range-selector button {
+        font-size: 24pt;
+        padding: 16px 28px;
+    }
+
+    .main-chart {
+        height: 800px;
+    }
+
+    .source-chart {
+        height: 1000px;
+    }
+
+
+  .source-charts {
+      grid-template-columns: 1fr;
+  }
+
+  .source-chart h2,
+    .main-chart h2 {
+        font-size: 32pt;
+    }
+
+
+  .score {
+    font-size: 48pt;
+  }
+
+  .change {
+    font-size: 48pt;
+  }
+
+  .label {
+    font-size: 26pt;
+  }
 }

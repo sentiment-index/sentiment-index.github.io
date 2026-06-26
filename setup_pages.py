@@ -100,7 +100,7 @@ def generate_about():
 
 </div>
 
-<div class="timenote">Last updated {datetime.now().strftime("%I:%M%p on %B %d, %Y")}</div>
+<div class="timenote">Last updated {datetime.now().strftime("%I:%M%p UTC on %B %d, %Y")}</div>
 
 <script src="site-assets/search.js"></script>
 </body>
@@ -229,7 +229,7 @@ def generate_index():
     html += f"""
 </div>
 
-<div class="timenote">Last updated {datetime.now().strftime("%I:%M%p on %B %d, %Y")}</div>
+<div class="timenote">Last updated {datetime.now().strftime("%I:%M%p UTC on %B %d, %Y")}</div>
 </body>
 </html>
 """
@@ -367,7 +367,7 @@ def generate_term_page(term: str):
 
         <div class="range-selector-wrapper">
             <div class="range-selector">
-                <button onclick="updateRange(30)">30D</button>
+                <button onclick="updateRange(30)" class="active">30D</button>
                 <button onclick="updateRange(90)">90D</button>
                 <button onclick="updateRange(365)">365D</button>
             </div>
@@ -424,6 +424,8 @@ def generate_term_page(term: str):
                 }}]
             }},
             options: {{
+                responsive: true,
+                maintainAspectRatio: false,
                 scales: {{
                     y: {{
                         min: -1,
@@ -473,6 +475,7 @@ def generate_term_page(term: str):
                 }},
                 options: {{
                     responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {{
                         legend: {{
                             display: false
@@ -510,6 +513,8 @@ def generate_term_page(term: str):
                     }}]
                 }},
                 options: {{
+                    responsive: true,
+                    maintainAspectRatio: false,
                     responsive: true,
                     plugins: {{
                         legend: {{
@@ -554,7 +559,7 @@ def generate_term_page(term: str):
         }}
     </script>
 
-    <div class="timenote">Last updated {datetime.now().strftime("%I:%M%p on %B %d, %Y")}</div>
+    <div class="timenote">Last updated {datetime.now().strftime("%I:%M%p UTC on %B %d, %Y")}</div>
 
     </body>
     </html>
@@ -677,7 +682,7 @@ function sortTable(columnIndex, isNumeric = false) {{
 </table>
 </div>
 
-<div class="timenote">Last updated {datetime.now().strftime("%I:%M%p on %B %d, %Y")}</div>
+<div class="timenote">Last updated {datetime.now().strftime("%I:%M%p UTC on %B %d, %Y")}</div>
 
 <script src="site-assets/search.js"></script>
 
