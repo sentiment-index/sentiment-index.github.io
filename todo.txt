@@ -27,7 +27,7 @@
     - [x] Rewrite 'about'
     - [x] Test mobile
     - [x] Center text in table rows
-    - [ ] 30d should start highlighted
+    - [x] 30d should start highlighted
     - [x] Fix centering on search
     - [x] Fix time windows on sub graphs
     - [x] Redo logo

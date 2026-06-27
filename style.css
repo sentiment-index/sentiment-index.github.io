@@ -440,6 +440,7 @@ background: rgba(255,255,255,0.4);
     grid-template-columns: 1fr 1fr;
     gap: 24px;
     margin-top: 40px;
+    min-width: 0;
 }
 
 .source-chart > h2 {
@@ -451,6 +452,9 @@ background: rgba(255,255,255,0.4);
     padding: 16px;
     border-radius: 12px;
     height: 500px;
+    overflow: hidden;
+    min-width: 0;
+
 }
 
 .source-chart {
@@ -461,6 +465,10 @@ background: rgba(255,255,255,0.4);
 
     display: flex;
     flex-direction: column;
+
+    min-width: 0;
+    overflow: hidden;
+
 }
 
 .source-chart canvas {
@@ -541,8 +549,6 @@ background: rgba(255,255,255,0.4);
     font-size: 24pt;
   }
 
-
-
   .score-label {
     font-size: 18pt;
   }
@@ -600,7 +606,7 @@ background: rgba(255,255,255,0.4);
     }
 
     .source-chart {
-        height: 1000px;
+        height: 800px;
     }
 
 

@@ -176,8 +176,8 @@ def generate_index():
       </div>
 </div>
 <div class="topbox">
-<h1>But how does Reddit feel about it?</h1>
-  <h2>We track sentiment across thousands of Reddit posts to show you how opinions change over time.</h2>
+<h1>But how does the internet feel about it?</h1>
+  <h2>We track sentiment across thousands of social media posts to show you how opinions change over time.</h2>
 </div>
 <div class="wrapper">
 
